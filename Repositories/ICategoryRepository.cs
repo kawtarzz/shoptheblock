@@ -6,10 +6,10 @@ namespace Fullstack_ECommerce_.Repositories
 {
     public interface ICategoryRepository
     {
-        void Add(Category category);
-        void Delete(int categoryId);
-        void Edit(string oldName, string newName);
-        List<Category> GetAll();
-        Category GetById(int categoryId);
+        public void Add(Category category);
+        public void Delete(int id);
+        public void Edit(string oldName, string newName);
+        public List<Category> GetAll();
+        public Category GetById(int categoryId);
     }
 }

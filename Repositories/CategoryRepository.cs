@@ -22,10 +22,10 @@ namespace Fullstack_ECommerce_.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = $@"
-                        SELECT Id, [Name]
-                        FROM dbo.Category
-                        ORDER BY [Name]
+                    cmd.CommandText = @"
+                        SELECT Id, Name
+                        FROM Category
+                        ORDER BY Name
                     ";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -58,13 +58,11 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     //! If category already exists, but is deleted, restore it.
-                    cmd.CommandText = $@"
-	                        INSERT INTO Category (Id, Name)
-	                        VALUES (@Id, @Name)";
+                    cmd.CommandText = @"
+	                        INSERT INTO Category ( Name)
+	                        VALUES (@Name)";
 
                     DbUtils.AddParameter(cmd, "@Name", category.Name);
-                    DbUtils.AddParameter(cmd, "@Id", category.Id);
-                    category.Id = (int)cmd.ExecuteScalar();
 
                     cmd.ExecuteNonQuery();
                 }
@@ -102,7 +100,7 @@ namespace Fullstack_ECommerce_.Repositories
             }
 
         }
-        public void Delete(int categoryId)
+        public void Delete(int id)
         {
             using (SqlConnection conn = Connection)
             {
@@ -112,10 +110,10 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     cmd.CommandText = @"
                         UPDATE Category
-                        WHERE Id = @Id
+                        WHERE Id = @id
                     ";
-
-                    Utils.DbUtils.AddParameter(cmd, "@Id", categoryId);
+                    
+                    DbUtils.AddParameter(cmd, "@Id", id);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -131,13 +129,13 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        UPDATE dbo.Category
-                        SET [Name] = @NewName
-                        WHERE [Name] = @OldName
+                        UPDATE Category
+                        SET Name = @NewName
+                        WHERE Name = @OldName
                     ";
 
-                    Utils.DbUtils.AddParameter(cmd, "@NewName", newName);
-                    Utils.DbUtils.AddParameter(cmd, "@OldName", oldName);
+                    DbUtils.AddParameter(cmd, "@NewName", newName);
+                    DbUtils.AddParameter(cmd, "@OldName", oldName);
 
                     cmd.ExecuteNonQuery();
                 }

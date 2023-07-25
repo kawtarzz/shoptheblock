@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Fullstack_ECommerce_.Models;
 using Fullstack_ECommerce_.Repositories;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,7 +43,7 @@ namespace Fullstack_ECommerce_.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Category newCategory)
+        public IActionResult AddCategory([FromBody] Category newCategory)
         {
             try
             {
@@ -57,19 +58,20 @@ namespace Fullstack_ECommerce_.Controllers
         }
 
 
-        [HttpDelete("{categoryId}")]
-        public IActionResult Delete([FromRoute] int categoryId)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
             try
-            {
-                _categoryRepository.Delete(categoryId);
-
-                return NoContent();
+                {
+                    _categoryRepository.Delete(id);
+                    
+                    return NoContent();
             }
             catch
             {
                 return BadRequest();
-            }
+            } 
+           
         }
 
         [HttpPut]
