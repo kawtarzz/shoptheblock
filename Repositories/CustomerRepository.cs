@@ -60,14 +60,14 @@ namespace Fullstack_ECommerce_.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT c.Id, c.FullName,
-                        c.Email, c.FirebaseUserId,
-                        c.ProfilePic
-                          FROM Customer c
-                         WHERE c.Id = @id"
+                        SELECT 
+                        Id, FullName, Email, 
+                        FirebaseUserId, ProfilePic
+                        FROM Customer
+                        WHERE Id = @id"
 ;
 
-                    DbUtils.AddParameter(cmd, "@id", id);
+                    DbUtils.AddParameter(cmd, "@Id", id);
 
                     Customer customer = null;
 
@@ -77,7 +77,7 @@ namespace Fullstack_ECommerce_.Repositories
                         customer = new Customer()
                         {
                             Id = DbUtils.GetInt(reader, "Id"),
-                            FullName = DbUtils.GetString(reader, "FirstName"),
+                            FullName = DbUtils.GetString(reader, "FullName"),
                             Email = DbUtils.GetString(reader, "Email"),
                             FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
                             ProfilePic = DbUtils.GetString(reader, "ProfilePic")
@@ -97,11 +97,11 @@ namespace Fullstack_ECommerce_.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT  SELECT c.Id, c.FullName,
-                                            c.Email, c.FirebaseUserId,
-                                            c.ProfilePic
-                                            FROM Customer c
-                                            ORDER BY c.FullName";
+                    cmd.CommandText = @"SELECT c.Id, c.FullName,
+                                        c.Email, c.FirebaseUserId,
+                                        c.ProfilePic
+                                        FROM Customer c
+                                        ORDER BY c.FullName";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -131,12 +131,12 @@ namespace Fullstack_ECommerce_.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"INSERT INTO Customer(FirebaseUserId, FullName, Email, ProfilePic)
-                                        OUTPUT INSERTED.ID
                                         VALUES (@FirebaseUserId, @FullName, @Email, @ProfilePic)";
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", customer.FirebaseUserId);
                     DbUtils.AddParameter(cmd, "@FullName", customer.FullName);
                     DbUtils.AddParameter(cmd, "@Email", customer.Email);
                     DbUtils.AddParameter(cmd, "@ProfilePic", customer.ProfilePic);
+                    DbUtils.AddParameter(cmd, "@Id", customer.Id);
 
                     customer.Id = (int)cmd.ExecuteScalar();
                 }

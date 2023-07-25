@@ -6,10 +6,10 @@ namespace Fullstack_ECommerce_.Repositories
 {
     public interface ICustomerRepository
     {
-        void Add(Customer customer);
-        Customer GetByFirebaseUserId(string firebaseUserId);
-        Customer GetById(int id);
-        List<Customer> GetCustomers();
-        void Update(Customer customer);
+        public void Add(Customer customer); //
+        public Customer GetByFirebaseUserId(string firebaseUserId); //
+        public Customer GetById(int id); //
+        public List<Customer> GetCustomers(); //
+        public void Update(Customer customer);
     }
 }

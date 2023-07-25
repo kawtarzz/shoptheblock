@@ -46,3 +46,6 @@ C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\runtimes\win-x64\
 C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client_ecommerce\package-lock.json
+C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client_ecommerce\package.json
+C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client_ecommerce\public\manifest.json

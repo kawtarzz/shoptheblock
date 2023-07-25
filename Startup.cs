@@ -32,7 +32,13 @@ namespace Fullstack_ECommerce_
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<IPaymentTypeRepository, PaymentTypeRepository>();
+            services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
+
+
             var firebaseProjectId = Configuration.GetValue<string>("FirebaseProjectId");
             var googleTokenUrl = $"https://securetoken.google.com/{firebaseProjectId}";
             services
