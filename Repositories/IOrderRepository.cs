@@ -8,5 +8,6 @@ namespace Fullstack_ECommerce_.Repositories
     {
         List<Order> GetAll();
         Order GetOrderById(int orderId);
+        void Add(Order newOrder);
     }
 }

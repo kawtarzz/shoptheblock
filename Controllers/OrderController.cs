@@ -21,17 +21,37 @@ namespace Fullstack_ECommerce_.Controllers
             _orderRepository = orderRepository;
         }
 
-        [HttpGet("GetOrderById/{orderId}")]
+        [HttpGet("{orderId}")]
         public IActionResult GetById(int orderId)
         {
-            return Ok(_orderRepository.GetOrderById(orderId));
+            var order = _orderRepository.GetOrderById(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return Ok(order);
         }
 
         [HttpGet]
+        // all orders
         public IActionResult Get()
         {
             List<Order> orders = _orderRepository.GetAll();
             return Ok(orders);
+        }
+
+        [HttpPost]
+        public IActionResult Post(Order newOrder)
+        {
+            try
+            {
+                _orderRepository.Add(newOrder);
+                return CreatedAtAction("GET", new { newOrder.Id }, newOrder);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

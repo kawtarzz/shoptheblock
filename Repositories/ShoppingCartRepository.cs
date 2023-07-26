@@ -20,7 +20,7 @@ namespace Fullstack_ECommerce_.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT Id, CustomerId, ProductId, ShoppingComplete
+                    SELECT Id, UserId, ProductId, ShoppingComplete
                     FROM ShoppingCart
                     WHERE Id = @id";
                     DbUtils.AddParameter(cmd, "@Id", id);
@@ -31,7 +31,7 @@ namespace Fullstack_ECommerce_.Repositories
                         shoppingCart = new ShoppingCart()
                         {
                             Id = id,
-                            CustomerId = DbUtils.GetInt(reader, "CustomerId"),
+                            UserId = DbUtils.GetInt(reader, "UserId"),
                             ProductId = DbUtils.GetInt(reader, "ProductId"),
                             ShoppingComplete = DbUtils.GetBool(reader, "ShoppingComplete")
                         };

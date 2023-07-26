@@ -96,23 +96,30 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    INSERT INTO Product (
-                    Name
-                    Price
-                    Description
-                    ProductImage
-                    Stock
+                    INSERT INTO [Product] (
+                    Name,
+                    Price,
+                    Description,
+                    ProductImage,
+                    Stock,
                     CategoryId
                     )
-                    VALUES (@Name, @Price, @Description, @ProductImage, @Stock, @CategoryId)";
+                    OUTPUT INSERTED.ID
+                    VALUES (
+                    @Name, 
+                    @Price, 
+                    @Description, 
+                    @ProductImage, 
+                    @Stock, 
+                    @CategoryId
+                    )";
                     DbUtils.AddParameter(cmd, "@Name", product.Name);
                     DbUtils.AddParameter(cmd, "@Price", product.Price);
                     DbUtils.AddParameter(cmd, "@Description", product.Description);
                     DbUtils.AddParameter(cmd, "@ProductImage", product.ProductImage);
                     DbUtils.AddParameter(cmd, "@Stock", product.Stock);
                     DbUtils.AddParameter(cmd,"@CategoryId", product.CategoryId);
-
-                    cmd.ExecuteNonQuery();
+                    product.Id = (int)cmd.ExecuteScalar();
                 }
             }
         }

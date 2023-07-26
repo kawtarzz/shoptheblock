@@ -6,10 +6,10 @@ namespace Fullstack_ECommerce_.Repositories
 {
     public interface IProductRepository
     {
-        public void Add(Product product);
-        public Product GetProduct(int productId);
-        public List<Product> GetProducts();
-        public void Update(Product product);
-        public void Delete(int productId);
+         void Add(Product product);
+         Product GetProduct(int productId);
+         List<Product> GetProducts();
+         void Update(Product product);
+         void Delete(int productId);
     }
 }
