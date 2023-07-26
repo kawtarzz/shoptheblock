@@ -51,7 +51,7 @@ namespace Fullstack_ECommerce_.Repositories
             }
         }
 
-        public Product GetProduct(int productId)
+        public Product GetProductDetails(int productId)
         {
             using (var conn = Connection)
             {
@@ -60,7 +60,7 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     cmd.CommandText = @"
                     SELECT
-                    Name, Price, Description, 
+                    Id, Name, Price, Description, 
                     ProductImage, Stock, CategoryId
                     FROM Product
                     WHERE Id = @Id";

@@ -14,6 +14,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
@@ -22,21 +23,32 @@ namespace Fullstack_ECommerce_.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
+        [HttpGet("{firebaseUserId}")]
+        public IActionResult GetUser(string firebaseUserId)
         {
-            List<User> users = _userRepository.GetUsers();
-            return Ok(users);
+            return Ok(_userRepository.GetByFirebaseUserId(firebaseUserId));
         }
 
-       [HttpGet("{firebaseUserId}")]
-       public IActionResult GetFirebaseProfile(string firebaseUserId)
+        [HttpGet("DoesUserExist/{firebaseUserId}")]
+       public IActionResult DoesUserExist(string firebaseUserId)
        {
-            return Ok(_userRepository.GetByFirebaseUserId(firebaseUserId));
+            var user = _userRepository.GetByFirebaseUserId(firebaseUserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
        }
+
+        [HttpGet]
+        public IActionResult GetAllUsers()
+        {
+            return Ok(_userRepository.GetUsers());
+        }
+
         
-        [HttpGet("GetById/{id}")]
-        public IActionResult GetUser(int id)
+        [HttpGet("details/{id}")]
+        public IActionResult GetUserById(int id)
         {
             var user = _userRepository.GetById(id);
             if (user == null)
@@ -51,10 +63,31 @@ namespace Fullstack_ECommerce_.Controllers
         {
             _userRepository.Add(user);
             return CreatedAtAction(
-                nameof(GetFirebaseProfile),
+                nameof(GetUser),
                 new { firebaseUserId = user.FirebaseUserId }, user);
         }
-       
-        
+
+        [HttpPut("{id}")]
+        public IActionResult Edit(int id, User user)
+        {
+            var currentUserProfile = GetCurrentUser();
+
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _userRepository.Update(user);
+            return NoContent();
+
+        }
+
+        private User GetCurrentUser()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepository.GetByFirebaseUserId(firebaseUserId);
+        }
+
+
     }
 }

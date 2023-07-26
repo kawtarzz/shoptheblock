@@ -25,7 +25,7 @@ namespace Fullstack_ECommerce_.Repositories
                         SELECT Id, FullName, 
                         Email, Password, FirebaseUserId, 
                         ProfilePic
-                        FROM User
+                        FROM [User]
                         WHERE FirebaseUserId = @FirebaseuserId";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
