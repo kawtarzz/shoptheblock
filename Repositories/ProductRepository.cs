@@ -22,11 +22,14 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT Id, Name, Price,
-                    Description, ProductImage,
-                    Stock, CategoryId
-                    From Product
-                    ORDER BY Name";
+                    SELECT p.Id AS ProductId, p.Name AS ProductName,
+                    p.Description, p.Price, p.ProductImage, p.CategoryId,
+                    p.Stock, 
+                    c.Id AS CategoryId, c.Name AS CategoryName
+                    From Product p
+                    LEFT JOIN Category c ON p.CategoryId = c.Id
+                    ORDER BY ProductId;
+                    ";
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         List<Product> products = new List<Product>();
@@ -35,13 +38,17 @@ namespace Fullstack_ECommerce_.Repositories
                         {
                             Product newProduct = new()
                             {
-                                Id = DbUtils.GetInt(reader, "Id"),
-                                Name = DbUtils.GetString(reader, "Name"),
-                                Price = DbUtils.GetDec(reader, "Price"),
+                                Id = DbUtils.GetInt(reader, "ProductId"),
+                                Name = DbUtils.GetString(reader, "ProductName"),
                                 Description = DbUtils.GetString(reader, "Description"),
+                                Price = DbUtils.GetDec(reader, "Price"),
                                 ProductImage = DbUtils.GetString(reader, "ProductImage"),
                                 Stock = DbUtils.GetInt(reader, "Stock"),
-                                CategoryId = DbUtils.GetInt(reader, "CategoryId")
+                                Category = new Category
+                                {
+                                    Id = DbUtils.GetInt(reader, "CategoryId"),
+                                    Name = DbUtils.GetString(reader, "CategoryName")
+                                }
                             };
                             products.Add(newProduct);
                         }
@@ -59,11 +66,14 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT
-                    Id, Name, Price, Description, 
-                    ProductImage, Stock, CategoryId
-                    FROM Product
-                    WHERE Id = @Id";
+                    SELECT p.Id AS ProductId, p.Name AS ProductName,
+                    p.Description, p.Price, p.ProductImage, p.CategoryId,
+                    p.Stock, 
+                    c.Id AS CategoryId, c.Name AS CategoryName
+                    From Product p
+                    LEFT JOIN Category c ON p.CategoryId = c.Id
+                    WHERE p.Id = @Id
+                    ORDER BY p.Id;";
 
                     DbUtils.AddParameter(cmd, "@Id", productId);
 
@@ -74,12 +84,16 @@ namespace Fullstack_ECommerce_.Repositories
                             product = new Product()
                             {
                                 Id = productId,
-                                Name = DbUtils.GetString(reader, "Name"),
+                                Name = DbUtils.GetString(reader, "ProductName"),
                                 Price = DbUtils.GetDec(reader, "Price"),
                                 Description = DbUtils.GetString(reader, "Description"),
                                 ProductImage = DbUtils.GetString(reader, "ProductImage"),
                                 Stock = DbUtils.GetInt(reader, "Stock"),
-                                CategoryId = DbUtils.GetInt(reader, "CategoryId"),
+                                Category = new Category
+                                {
+                                    Id = DbUtils.GetInt(reader, "CategoryId"),
+                                    Name = DbUtils.GetString(reader, "CategoryName")
+                                }
                             };
                         }
                         reader.Close();
@@ -87,7 +101,7 @@ namespace Fullstack_ECommerce_.Repositories
                     }
                 }
             }
-        // POST NOT CURRENTLY WORKING
+
         public void Add(Product product)
         {
             using (SqlConnection conn = Connection)
@@ -97,28 +111,32 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     cmd.CommandText = @"
                     INSERT INTO [Product] (
-                    Name,
+                    ProductName,
                     Price,
                     Description,
                     ProductImage,
                     Stock,
-                    CategoryId
+                    CategoryId,
+                    CategoryName
                     )
                     OUTPUT INSERTED.ID
                     VALUES (
-                    @Name, 
+                    @ProductName, 
                     @Price, 
                     @Description, 
                     @ProductImage, 
                     @Stock, 
-                    @CategoryId
+                    @CategoryId,
+                    @CategoryName
                     )";
-                    DbUtils.AddParameter(cmd, "@Name", product.Name);
+                    DbUtils.AddParameter(cmd, "@ProductName", product.Name);
                     DbUtils.AddParameter(cmd, "@Price", product.Price);
                     DbUtils.AddParameter(cmd, "@Description", product.Description);
                     DbUtils.AddParameter(cmd, "@ProductImage", product.ProductImage);
                     DbUtils.AddParameter(cmd, "@Stock", product.Stock);
-                    DbUtils.AddParameter(cmd,"@CategoryId", product.CategoryId);
+                    DbUtils.AddParameter(cmd,"@CategoryId", product.Category.Id);
+                    DbUtils.AddParameter(cmd, "@CategoryName", product.Category.Name);
+
                     product.Id = (int)cmd.ExecuteScalar();
                 }
             }
@@ -134,21 +152,24 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     cmd.CommandText = @"
                     UPDATE Product
-                    SET Name = @name
+                    SET Name = @productName
                         Price = @price
                         Description = @description
                         ProductImage = @productImage
                         Stock = @stock
                         CategoryId = @categoryId
+                        CategoryName = @categoryName
                     WHERE Id = @id
                     ";
-                    DbUtils.AddParameter(cmd, "@name", product.Name);
+                    DbUtils.AddParameter(cmd, "@id", product.Id);
+                    DbUtils.AddParameter(cmd, "@productName", product.Name);
                     DbUtils.AddParameter(cmd, "@price", product.Price);
                     DbUtils.AddParameter(cmd, "@description", product.Description);
                     DbUtils.AddParameter(cmd, "@productImage", product.ProductImage);
                     DbUtils.AddParameter(cmd, "@stock", product.Stock);
-                    DbUtils.AddParameter(cmd, "@categoryId", product.CategoryId);
-                    DbUtils.AddParameter(cmd, "@id", product.Id);
+                    DbUtils.AddParameter(cmd, "@categoryId", product.Category.Id);
+                    DbUtils.AddParameter(cmd, "@categoryName", product.Category.Name);
+
                     cmd.ExecuteNonQuery();
                 }
             }

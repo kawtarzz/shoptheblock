@@ -18,8 +18,10 @@ export default function Product({ product }) {
       <div>
         <img height="20%" width="20%" src={product.productImage} alt={product.name} />
       </div>
-      <p className="text-left px-2">Price: ${product.price}</p>
       <p className="text-left px-2">Description: {product.description}</p>
+      <p className="text-left px-2">Category: {product.category.name}</p>
+
+      <p className="text-left px-2">Price: ${product.price}</p>
       <p className="text-left px-2">Quantity: {product.stock}</p>
       <button className="btn btn-primary" onClick={handleDetails}>Details</button>
     </Card>

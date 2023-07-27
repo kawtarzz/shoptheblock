@@ -52,7 +52,7 @@ namespace Fullstack_ECommerce_.Repositories
             }
         }
           
-        public User GetById(int id)
+        public User GetById(int userId)
         {
             using (var conn = Connection)
             {
@@ -67,7 +67,7 @@ namespace Fullstack_ECommerce_.Repositories
                         WHERE Id = @id"
 ;
 
-                    DbUtils.AddParameter(cmd, "@Id", id);
+                    DbUtils.AddParameter(cmd, "@Id", userId);
 
                     User user = null;
 
@@ -128,23 +128,30 @@ namespace Fullstack_ECommerce_.Repositories
 
         public void Add(User user)
         {
-            using (var conn = Connection)
+            using (SqlConnection conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO User (
+                    cmd.CommandText = @"INSERT INTO [User] (
                                         FullName, 
-                                        Email, Password, 
+                                        Email,
+                                        Password, 
                                         FirebaseUserId,
                                         ProfilePic
                                         )
                                         OUTPUT INSERTED.ID
-                                        VALUES (@FullName, @Email, @Password, @FirebaseUserId,  @ProfilePic)";
-                    DbUtils.AddParameter(cmd, "@FirebaseUserId", user.FirebaseUserId);
+                                        VALUES (
+                                        @FullName, 
+                                        @Email, 
+                                        @Password, 
+                                        @FirebaseUserId,  
+                                        @ProfilePic
+                                        )";
                     DbUtils.AddParameter(cmd, "@FullName", user.FullName);
                     DbUtils.AddParameter(cmd, "@Email", user.Email);
                     DbUtils.AddParameter(cmd, "@Password", user.Password);
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", user.FirebaseUserId);
                     DbUtils.AddParameter(cmd, "@ProfilePic", user.ProfilePic);
 
                     user.Id = (int)cmd.ExecuteScalar();

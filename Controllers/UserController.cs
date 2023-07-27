@@ -59,12 +59,19 @@ namespace Fullstack_ECommerce_.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(User user)
+        public IActionResult Post(User newUser)
         {
-            _userRepository.Add(user);
-            return CreatedAtAction(
-                nameof(GetUser),
-                new { firebaseUserId = user.FirebaseUserId }, user);
+            try
+            {
+
+            _userRepository.Add(newUser);
+                return CreatedAtAction(
+                    "GET", new { newUser.Id }, newUser);
+            } catch
+            {
+                return BadRequest();
+            }
+           
         }
 
         [HttpPut("{id}")]

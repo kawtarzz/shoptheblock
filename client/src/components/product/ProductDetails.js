@@ -27,7 +27,8 @@ export default function ProductDetails() {
             className="mt-5 mb-5"
             width="100%" height="200px" />
           <p>{product.description}</p>
-          <p>{product.price}</p>
+          <p>Price: ${product.price}</p>
+          {product.category && <p>Category: {product.category.name}</p>}
           <Button variant="primary">Add to Cart</Button>
         </div>
       </div>

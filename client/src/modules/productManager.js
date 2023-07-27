@@ -21,9 +21,21 @@ export const getProducts = () => {
   });
 };
 
-export const getProductDetails = (id) => {
+export const searchProducts = (searchTerm) => {
+  return fetch(`${apiUrl}/search?q=${searchTerm}`).then((resp) => {
+    if (resp.ok) {
+      return resp.json();
+    } else {
+      throw new Error(
+        "An unknown error occurred while trying to search for products.",
+      );
+    }
+  });
+};
+
+export const getProductDetails = (productId) => {
   return getToken().then((token) => {
-    return fetch(`${apiUrl}/${id}`, {
+    return fetch(`${apiUrl}/${productId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
