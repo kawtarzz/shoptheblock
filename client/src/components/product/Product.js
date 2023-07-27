@@ -12,7 +12,7 @@ export default function Product({ product }) {
   }
 
   return (
-    <Card className="m-4" style={{ 'borderRadius': '20px' }}>
+    <Card className="m-4" style={{ 'borderRadius': '5px' }}>
 
       <p className="text-left px-2">Name: {product.name}</p>
       <div>

@@ -17,14 +17,15 @@ export default function ApplicationViews({ isLoggedIn }) {
             index
             element={isLoggedIn ? <ProductList /> : <Navigate to="/login" />}
           />
-
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="productDetails/:id" element={<ProductDetails />} />
+          <Route path="products" element={isLoggedIn ? <ProductList /> : <Navigate to="/login" />} />
+          <Route path="productDetails/:id" element={isLoggedIn ? <ProductDetails /> : <Navigate to="/login" />
+          }
+          />
+
         </Route>
       </Routes>
     </main>
-
-
   )
 };

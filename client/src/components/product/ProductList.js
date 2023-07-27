@@ -13,11 +13,18 @@ export default function ProductList() {
   return (
     <>
       <h1>Products</h1>
-      <Card className="products">
-        {products.map((product) => (
-          <Product key={product.id} product={product} />
-        ))}
-      </Card>
+      <div class="card">
+        <div class="row">
+          {products.map((product) => (
+            <div key={product.id} class="
+            col-xs-12
+            col-sm-8
+            col-lg-4">
+              <Product key={product.id} product={product} />
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
 }
