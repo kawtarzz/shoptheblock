@@ -13,6 +13,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -33,7 +34,7 @@ namespace Fullstack_ECommerce_.Controllers
         [HttpGet("{productId}")]
         public IActionResult GetById(int productId)
         {
-            var product = _productRepository.GetProduct(productId);
+            var product = _productRepository.GetProductDetails(productId);
             if (product == null)
             {
                 return NotFound();

@@ -7,15 +7,14 @@ using Fullstack_ECommerce_.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic.CompilerServices;
-using static Fullstack_ECommerce_.Repositories.CustomerRepository;
 
 namespace Fullstack_ECommerce_.Repositories
 {
-    public class CustomerRepository : BaseRepository, ICustomerRepository
+    public class UserRepository : BaseRepository, IUserRepository
     {
-        public CustomerRepository(IConfiguration configuration) : base(configuration) { }
+        public UserRepository(IConfiguration configuration) : base(configuration) { }
 
-        public Customer GetByFirebaseUserId(string firebaseUserId)
+        public User GetByFirebaseUserId(string firebaseUserId)
         {
             using (var conn = Connection)
             {
@@ -23,36 +22,37 @@ namespace Fullstack_ECommerce_.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT c.Id, c.FullName, 
-                        c.Email, c.FirebaseUserId, 
-                        c.ProfilePic
-                        FROM Customer c
+                        SELECT Id, FullName, 
+                        Email, Password, FirebaseUserId, 
+                        ProfilePic
+                        FROM [User]
                         WHERE FirebaseUserId = @FirebaseuserId";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
 
-                    Customer customer = null;
+                    User user = null;
 
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
-                        customer = new Customer()
+                        user = new User()
                         {
                             Id = DbUtils.GetInt(reader, "Id"),
                             FullName = DbUtils.GetString(reader, "FullName"),
                             Email = DbUtils.GetString(reader, "Email"),
+                            Password = DbUtils.GetString(reader, "Password"),
                             FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
                             ProfilePic = DbUtils.GetString(reader, "ProfilePic")
                         };
                     }
                     reader.Close();
 
-                    return customer;
+                    return user;
                 }
             }
         }
-
-        public Customer GetById(int id)
+          
+        public User GetById(int id)
         {
             using (var conn = Connection)
             {
@@ -61,104 +61,115 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT 
-                        Id, FullName, Email, 
+                        Id, FullName, Email, Password, 
                         FirebaseUserId, ProfilePic
-                        FROM Customer
+                        FROM User
                         WHERE Id = @id"
 ;
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
-                    Customer customer = null;
+                    User user = null;
 
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
-                        customer = new Customer()
+                        user = new User()
                         {
                             Id = DbUtils.GetInt(reader, "Id"),
                             FullName = DbUtils.GetString(reader, "FullName"),
                             Email = DbUtils.GetString(reader, "Email"),
+                            Password = DbUtils.GetString(reader, "Password"),
                             FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
                             ProfilePic = DbUtils.GetString(reader, "ProfilePic")
                         };
                     }
                     reader.Close();
 
-                    return customer;
+                    return user;
                 }
             }
         }
 
-        public List<Customer> GetCustomers()
+        public List<User> GetUsers()
         {
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT c.Id, c.FullName,
-                                        c.Email, c.FirebaseUserId,
-                                        c.ProfilePic
-                                        FROM Customer c
-                                        ORDER BY c.FullName";
+                    cmd.CommandText = @"SELECT 
+                                        Id, FullName,
+                                        Email, Password, FirebaseUserId,
+                                        ProfilePic
+                                        FROM [User] 
+                                        ORDER BY FullName";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var customers = new List<Customer>();
+                        var users = new List<User>();
                         while (reader.Read())
                         {
-                            customers.Add(new Customer()
+                            users.Add(new User()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 FullName = DbUtils.GetString(reader, "FullName"),
                                 Email = DbUtils.GetString(reader, "Email"),
+                                Password = DbUtils.GetString(reader, "Password"),
                                 FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
                                 ProfilePic = DbUtils.GetString(reader, "ProfilePic")
                             });
                         }
-                        return customers;
+                        return users;
                     }
                 }
             }
         }
 
-        public void Add(Customer customer)
+        public void Add(User user)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO Customer(FirebaseUserId, FullName, Email, ProfilePic)
-                                        VALUES (@FirebaseUserId, @FullName, @Email, @ProfilePic)";
-                    DbUtils.AddParameter(cmd, "@FirebaseUserId", customer.FirebaseUserId);
-                    DbUtils.AddParameter(cmd, "@FullName", customer.FullName);
-                    DbUtils.AddParameter(cmd, "@Email", customer.Email);
-                    DbUtils.AddParameter(cmd, "@ProfilePic", customer.ProfilePic);
-                    DbUtils.AddParameter(cmd, "@Id", customer.Id);
+                    cmd.CommandText = @"INSERT INTO User (
+                                        FullName, 
+                                        Email, Password, 
+                                        FirebaseUserId,
+                                        ProfilePic
+                                        )
+                                        OUTPUT INSERTED.ID
+                                        VALUES (@FullName, @Email, @Password, @FirebaseUserId,  @ProfilePic)";
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", user.FirebaseUserId);
+                    DbUtils.AddParameter(cmd, "@FullName", user.FullName);
+                    DbUtils.AddParameter(cmd, "@Email", user.Email);
+                    DbUtils.AddParameter(cmd, "@Password", user.Password);
+                    DbUtils.AddParameter(cmd, "@ProfilePic", user.ProfilePic);
 
-                    customer.Id = (int)cmd.ExecuteScalar();
+                    user.Id = (int)cmd.ExecuteScalar();
                 }
             }
         }
 
-        public void Update(Customer customer)
+        public void Update(User user)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"UPDATE Customer
+                    cmd.CommandText = @"UPDATE User
                                         SET FullName = @fullName,
                                             Email = @email,
+                                            Password = @password,
                                             ProfilePic = @profilePic,
                                         WHERE Id = @id";
-                    DbUtils.AddParameter(cmd, "@fullName", customer.FullName);
-                    DbUtils.AddParameter(cmd, "@email", customer.Email);
-                    DbUtils.AddParameter(cmd, "@profilePic", customer.ProfilePic);
-                    DbUtils.AddParameter(cmd, "@id", customer.Id);
+                    DbUtils.AddParameter(cmd, "@fullName", user.FullName);
+                    DbUtils.AddParameter(cmd, "@email", user.Email);
+                    DbUtils.AddParameter(cmd, "@password", user.Password);
+                    DbUtils.AddParameter(cmd, "@profilePic", user.ProfilePic);
+                    DbUtils.AddParameter(cmd, "@id", user.Id);
 
                     cmd.ExecuteNonQuery();
                 }

@@ -33,7 +33,7 @@ namespace Fullstack_ECommerce_
         {
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
-            services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IPaymentTypeRepository, PaymentTypeRepository>();
             services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();

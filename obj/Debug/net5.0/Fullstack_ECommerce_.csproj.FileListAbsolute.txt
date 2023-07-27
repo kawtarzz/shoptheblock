@@ -49,3 +49,7 @@ C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\runtimes\win\lib\
 C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client_ecommerce\package-lock.json
 C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client_ecommerce\package.json
 C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client_ecommerce\public\manifest.json
+C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client\package-lock.json
+C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client\package.json
+C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\client\public\manifest.json
+C:\Users\kawta\workspace\Fullstack_ECommerce_\obj\Debug\net5.0\Fullstack_ECommerce_.csproj.AssemblyReference.cache
