@@ -61,13 +61,13 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT 
-                        Id, FullName, Email, Password, 
-                        FirebaseUserId, ProfilePic
-                        FROM User
-                        WHERE Id = @id"
+                        u.Id AS userId, u.FullName, u.Email, u.Password, 
+                        u.FirebaseUserId, u.ProfilePic
+                        FROM [User] u
+                        WHERE u.Id = @userId"
 ;
 
-                    DbUtils.AddParameter(cmd, "@Id", userId);
+                    DbUtils.AddParameter(cmd, "@userId", userId);
 
                     User user = null;
 
@@ -76,7 +76,7 @@ namespace Fullstack_ECommerce_.Repositories
                     {
                         user = new User()
                         {
-                            Id = DbUtils.GetInt(reader, "Id"),
+                            Id = DbUtils.GetInt(reader, "userId"),
                             FullName = DbUtils.GetString(reader, "FullName"),
                             Email = DbUtils.GetString(reader, "Email"),
                             Password = DbUtils.GetString(reader, "Password"),
@@ -184,3 +184,5 @@ namespace Fullstack_ECommerce_.Repositories
         }
     }
 }
+
+       

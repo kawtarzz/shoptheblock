@@ -1,5 +1,6 @@
 import { getToken } from "./authManager";
 
+
 const apiUrl = "/api/product";
 
 export const getProducts = () => {
@@ -18,18 +19,6 @@ export const getProducts = () => {
         );
       }
     });
-  });
-};
-
-export const searchProducts = (searchTerm) => {
-  return fetch(`${apiUrl}/search?q=${searchTerm}`).then((resp) => {
-    if (resp.ok) {
-      return resp.json();
-    } else {
-      throw new Error(
-        "An unknown error occurred while trying to search for products.",
-      );
-    }
   });
 };
 

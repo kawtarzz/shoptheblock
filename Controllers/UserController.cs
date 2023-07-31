@@ -14,7 +14,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
@@ -40,13 +40,15 @@ namespace Fullstack_ECommerce_.Controllers
             return Ok(user);
        }
 
-        [HttpGet]
+        [HttpGet("GetAllUsers")]
         public IActionResult GetAllUsers()
         {
             return Ok(_userRepository.GetUsers());
         }
 
-        
+
+
+
         [HttpGet("details/{id}")]
         public IActionResult GetUserById(int id)
         {
@@ -59,26 +61,24 @@ namespace Fullstack_ECommerce_.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(User newUser)
+        public IActionResult Post(User user)
         {
             try
             {
 
-            _userRepository.Add(newUser);
+            _userRepository.Add(user);
                 return CreatedAtAction(
-                    "GET", new { newUser.Id }, newUser);
+                   nameof(GetUser), new { firebaseUserId = user.FirebaseUserId }, user);
             } catch
             {
                 return BadRequest();
             }
            
         }
-
+        // doeesnt need user paramater i think
         [HttpPut("{id}")]
         public IActionResult Edit(int id, User user)
         {
-            var currentUserProfile = GetCurrentUser();
-
             if (id != user.Id)
             {
                 return BadRequest();
@@ -88,7 +88,6 @@ namespace Fullstack_ECommerce_.Controllers
             return NoContent();
 
         }
-
         private User GetCurrentUser()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;

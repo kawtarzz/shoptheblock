@@ -1,29 +1,31 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useLocation } from 'react-router-dom'
-import { Card } from "reactstrap"
+import { Card, CardImg, CardText, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup } from "reactstrap"
 
 export default function Product({ product }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+
   const handleDetails = () => {
     navigate(`/productDetails/${product.id}`, { state: { background: location } })
   }
 
+
   return (
-    <Card className="m-4" style={{ 'borderRadius': '5px' }}>
+    <Card className="m-4" style={{ 'borderRadius': '3px' }}>
+      <CardTitle tag="h5" onClick={handleDetails}>{product.name}</CardTitle>
+      <CardSubtitle tag="h6" className="mb-2 text-muted">{product.category?.name}</CardSubtitle>
+      <CardImg top width="100%" src={product.productImage} alt="Product Image" onClick={handleDetails} />
+      <CardBody>
+        <CardText>Price: ${product.price}</CardText>
+      </CardBody>
+      <ButtonGroup>
+        <Button color="primary" size="x-sm" onClick={handleDetails}>Details</Button>
 
-      <p className="text-left px-2">Name: {product.name}</p>
-      <div>
-        <img height="20%" width="20%" src={product.productImage} alt={product.name} />
-      </div>
-      <p className="text-left px-2">Description: {product.description}</p>
-      <p className="text-left px-2">Category: {product.category.name}</p>
+      </ButtonGroup>
 
-      <p className="text-left px-2">Price: ${product.price}</p>
-      <p className="text-left px-2">Quantity: {product.stock}</p>
-      <button className="btn btn-primary" onClick={handleDetails}>Details</button>
     </Card>
   )
 }

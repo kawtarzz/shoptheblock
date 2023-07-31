@@ -89,6 +89,7 @@ namespace Fullstack_ECommerce_.Repositories
                                 Description = DbUtils.GetString(reader, "Description"),
                                 ProductImage = DbUtils.GetString(reader, "ProductImage"),
                                 Stock = DbUtils.GetInt(reader, "Stock"),
+                                CategoryId = DbUtils.GetInt(reader, "CategoryId"),
                                 Category = new Category
                                 {
                                     Id = DbUtils.GetInt(reader, "CategoryId"),
@@ -110,34 +111,32 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    INSERT INTO [Product] (
-                    ProductName,
+                    INSERT INTO Product (
+                    Name,
                     Price,
                     Description,
                     ProductImage,
                     Stock,
-                    CategoryId,
-                    CategoryName
+                    CategoryId
                     )
-                    OUTPUT INSERTED.ID
+                    
                     VALUES (
-                    @ProductName, 
+                    @Name, 
                     @Price, 
                     @Description, 
                     @ProductImage, 
                     @Stock, 
-                    @CategoryId,
-                    @CategoryName
+                    @CategoryId
                     )";
-                    DbUtils.AddParameter(cmd, "@ProductName", product.Name);
+                    DbUtils.AddParameter(cmd, "@Name", product.Name);
                     DbUtils.AddParameter(cmd, "@Price", product.Price);
                     DbUtils.AddParameter(cmd, "@Description", product.Description);
                     DbUtils.AddParameter(cmd, "@ProductImage", product.ProductImage);
                     DbUtils.AddParameter(cmd, "@Stock", product.Stock);
-                    DbUtils.AddParameter(cmd,"@CategoryId", product.Category.Id);
-                    DbUtils.AddParameter(cmd, "@CategoryName", product.Category.Name);
+                    DbUtils.AddParameter(cmd,"@CategoryId", product.CategoryId);
+                    
 
-                    product.Id = (int)cmd.ExecuteScalar();
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
@@ -183,7 +182,7 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    UPDATE Product
+                    DELETE From Product
                     WHERE Id = @Id
                     ";
                     DbUtils.AddParameter(cmd, "@Id", productId);

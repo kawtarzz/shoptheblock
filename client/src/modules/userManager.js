@@ -2,6 +2,21 @@ import { getToken } from "./authManager";
 
 const baseUrl = "/api/User";
 
+export const registerUser = (user) => {
+  return getToken().then((token) => {
+    return fetch(`${baseUrl}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(user),
+    }).then((res) => res.json());
+  });
+};
+
+
+
 export const getAllUsers = () => {
   return getToken().then(token => {
     return fetch(baseUrl, {
@@ -25,6 +40,25 @@ export const getUserDetailsById = (id) => {
       .then(res => res.json())
   })
 }
+
+export const getUserByFirebaseUserId = (firebaseUserId) => {
+  return getToken().then(token => {
+    return fetch(`${baseUrl}/firebase/${firebaseUserId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        if (res.status === 404) {
+          return null
+        } else {
+          return res.json()
+        }
+      })
+  })
+}
+
 
 export const updateUser = (userObj) => {
   return getToken().then(token => {

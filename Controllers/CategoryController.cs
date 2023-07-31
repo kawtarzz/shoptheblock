@@ -14,7 +14,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
@@ -59,14 +59,13 @@ namespace Fullstack_ECommerce_.Controllers
         }
 
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        [HttpDelete("{categoryId}")]
+        public IActionResult Delete([FromRoute] int categoryId)
         {
             try
-                {
-                    _categoryRepository.Delete(id);
-                    
-                    return NoContent();
+            {
+                _categoryRepository.Delete(categoryId);    
+               return NoContent();
             }
             catch
             {

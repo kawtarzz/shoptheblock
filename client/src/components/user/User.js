@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { updateUser } from "../modules/userManager";
+import { updateUser } from "../../modules/userManager";
 
 const User = ({ user, getUsers }) => {
   const [displayDeactivateButton, setDisplayDeactivateButton] = useState(true);
