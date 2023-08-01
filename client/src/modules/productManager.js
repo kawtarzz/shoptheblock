@@ -1,5 +1,6 @@
 import { getToken } from "./authManager";
 
+
 const apiUrl = "/api/product";
 
 export const getProducts = () => {
@@ -21,9 +22,9 @@ export const getProducts = () => {
   });
 };
 
-export const getProductDetails = (id) => {
+export const getProductDetails = (productId) => {
   return getToken().then((token) => {
-    return fetch(`${apiUrl}/${id}`, {
+    return fetch(`${apiUrl}/${productId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`

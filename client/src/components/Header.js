@@ -20,13 +20,35 @@ export default function Header({ isLoggedIn }) {
             {isLoggedIn &&
               <>
                 <NavItem>
-                  <NavLink tag={RRNavLink} to="/products">Products</NavLink>
+                  <NavLink tag={RRNavLink} to="/">Home</NavLink>
                 </NavItem>
+
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/product">Products</NavLink>
+                </NavItem>
+
+                {/* category on nav should be a drop down menu */}
                 <NavItem>
                   <NavLink tag={RRNavLink} to="/categories">Categories</NavLink>
                 </NavItem>
+
+
+
                 <NavItem>
-                  <a aria-current="page" className="nav-link"
+                  <NavLink tag={RRNavLink} to="/shoppingcart">Shopping Cart</NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/orders">Orders</NavLink>
+                </NavItem>
+
+                <NavItem>
+
+                  <NavLink tag={RRNavLink} to="/user/details">User Details</NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <a href aria-current="page" className="nav-link"
                     style={{ cursor: "pointer" }} onClick={logout}>Logout</a>
                 </NavItem>
               </>

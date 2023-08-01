@@ -52,7 +52,7 @@ namespace Fullstack_ECommerce_.Repositories
             }
         }
           
-        public User GetById(int id)
+        public User GetById(int userId)
         {
             using (var conn = Connection)
             {
@@ -61,13 +61,13 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT 
-                        Id, FullName, Email, Password, 
-                        FirebaseUserId, ProfilePic
-                        FROM User
-                        WHERE Id = @id"
+                        u.Id AS userId, u.FullName, u.Email, u.Password, 
+                        u.FirebaseUserId, u.ProfilePic
+                        FROM [User] u
+                        WHERE u.Id = @userId"
 ;
 
-                    DbUtils.AddParameter(cmd, "@Id", id);
+                    DbUtils.AddParameter(cmd, "@userId", userId);
 
                     User user = null;
 
@@ -76,7 +76,7 @@ namespace Fullstack_ECommerce_.Repositories
                     {
                         user = new User()
                         {
-                            Id = DbUtils.GetInt(reader, "Id"),
+                            Id = DbUtils.GetInt(reader, "userId"),
                             FullName = DbUtils.GetString(reader, "FullName"),
                             Email = DbUtils.GetString(reader, "Email"),
                             Password = DbUtils.GetString(reader, "Password"),
@@ -128,23 +128,30 @@ namespace Fullstack_ECommerce_.Repositories
 
         public void Add(User user)
         {
-            using (var conn = Connection)
+            using (SqlConnection conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO User (
+                    cmd.CommandText = @"INSERT INTO [User] (
                                         FullName, 
-                                        Email, Password, 
+                                        Email,
+                                        Password, 
                                         FirebaseUserId,
                                         ProfilePic
                                         )
                                         OUTPUT INSERTED.ID
-                                        VALUES (@FullName, @Email, @Password, @FirebaseUserId,  @ProfilePic)";
-                    DbUtils.AddParameter(cmd, "@FirebaseUserId", user.FirebaseUserId);
+                                        VALUES (
+                                        @FullName, 
+                                        @Email, 
+                                        @Password, 
+                                        @FirebaseUserId,  
+                                        @ProfilePic
+                                        )";
                     DbUtils.AddParameter(cmd, "@FullName", user.FullName);
                     DbUtils.AddParameter(cmd, "@Email", user.Email);
                     DbUtils.AddParameter(cmd, "@Password", user.Password);
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", user.FirebaseUserId);
                     DbUtils.AddParameter(cmd, "@ProfilePic", user.ProfilePic);
 
                     user.Id = (int)cmd.ExecuteScalar();
@@ -177,3 +184,5 @@ namespace Fullstack_ECommerce_.Repositories
         }
     }
 }
+
+       

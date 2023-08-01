@@ -6,10 +6,10 @@ namespace Fullstack_ECommerce_.Repositories
 {
     public interface IUserRepository
     {
-        public void Add(User user); //
-        public User GetByFirebaseUserId(string firebaseUserId); //
-        public User GetById(int id); //
-        public List<User> GetUsers(); //
-        public void Update(User user);
+         void Add(User user); //
+         User GetByFirebaseUserId(string firebaseUserId); //
+         User GetById(int userId); //
+         List<User> GetUsers(); //
+         void Update(User user);
     }
 }

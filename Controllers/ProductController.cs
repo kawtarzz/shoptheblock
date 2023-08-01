@@ -13,7 +13,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -43,7 +43,7 @@ namespace Fullstack_ECommerce_.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Product newProduct)
+        public IActionResult AddProduct([FromBody] Product newProduct)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Fullstack_ECommerce_.Controllers
         }
 
         [HttpDelete("{productId}")]
-        public IActionResult Delete([FromRoute] int productId, Product product)
+        public IActionResult Delete([FromRoute] int productId)
         {
             try
             {

@@ -3,8 +3,10 @@
 namespace Fullstack_ECommerce_.Models
 {
     public class User
-    {
+    {   
         public int Id { get; set; }
+
+        //display username
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

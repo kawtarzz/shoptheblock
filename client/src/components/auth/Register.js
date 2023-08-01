@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { useNavigate, Link } from "react-router-dom";
-import { register } from "../modules/authManager";
+import { register } from "../../modules/authManager";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ export default function Register() {
       const user = {
         fullName,
         email,
+        // password, ? do we need this?
         profilePic,
       };
       register(user, password).then(() => navigate("/"));

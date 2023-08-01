@@ -57,7 +57,6 @@ namespace Fullstack_ECommerce_.Repositories
 
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    //! If category already exists, but is deleted, restore it.
                     cmd.CommandText = @"
 	                        INSERT INTO Category ( Name)
 	                        VALUES (@Name)";
@@ -100,7 +99,7 @@ namespace Fullstack_ECommerce_.Repositories
             }
 
         }
-        public void Delete(int id)
+        public void Delete(int categoryId)
         {
             using (SqlConnection conn = Connection)
             {
@@ -109,11 +108,11 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        UPDATE Category
+                        DELETE From Category
                         WHERE Id = @id
                     ";
                     
-                    DbUtils.AddParameter(cmd, "@Id", id);
+                    DbUtils.AddParameter(cmd, "@Id", categoryId);
 
                     cmd.ExecuteNonQuery();
                 }
