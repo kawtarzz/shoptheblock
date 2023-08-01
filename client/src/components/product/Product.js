@@ -7,11 +7,9 @@ export default function Product({ product }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-
   const handleDetails = () => {
     navigate(`/productDetails/${product.id}`, { state: { background: location } })
   }
-
 
   return (
     <Card className="m-4" style={{ 'borderRadius': '3px' }}>
@@ -23,6 +21,7 @@ export default function Product({ product }) {
       </CardBody>
       <ButtonGroup>
         <Button color="primary" size="x-sm" onClick={handleDetails}>Details</Button>
+
 
       </ButtonGroup>
 

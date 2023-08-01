@@ -3,26 +3,20 @@ import CartItem from './CartItem';
 import { ButtonGroup, Button } from 'reactstrap';
 
 
-const ShoppingCart = () => {
+const ShoppingCart = ({ user }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (product) => {
-    const { productId, productName, productImage, price, quantity, userId } = product;
-    const newCartItem = new CartItem(productId, productName, productImage, price, quantity, userId);
-    setCartItems([...cartItems, newCartItem]);
-
-  };
 
   const handleCheckout = () => {
     // navigate(`/checkout`, { state: { background: location } })
   };
 
   const renderCartItems = () => {
-    return cartItems.map((item) => (
-      <div key={item.productId}>
-        <img src={item.productImage} alt={item.productName} />
-        <p>{item.productName}</p>
-        <p>{item.price}</p>
+    return cartItems.map((c) => (
+      <div key={c.productId}>
+        <img src={c.productImage} alt={c.productName} />
+        <p>{c.productName}</p>
+        <p>{c.price}</p>
       </div>
     ));
   };

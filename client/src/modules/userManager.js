@@ -41,9 +41,9 @@ export const getUserDetailsById = (id) => {
   })
 }
 
-export const getUserByFirebaseUserId = (firebaseUserId) => {
+export const getUser = (firebaseUserId) => {
   return getToken().then(token => {
-    return fetch(`${baseUrl}/firebase/${firebaseUserId}`, {
+    return fetch(`${baseUrl}/${firebaseUserId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`

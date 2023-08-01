@@ -69,11 +69,7 @@ namespace Fullstack_ECommerce_.Controllers
           
         }
 
-        //private List<ShoppingCart> GetCurrentUserProfile()
-        //{
-        //    var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        //    return _userRepository.GetByFirebaseUserId(firebaseUserId);
-        //}
+       
 
     }
 }

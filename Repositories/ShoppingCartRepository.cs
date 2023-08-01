@@ -125,15 +125,25 @@ namespace Fullstack_ECommerce_.Repositories
                     cmd.CommandText = @"
                         INSERT INTO ShoppingCart (
                                     Quantity,
+                                    ProductId,
+                                    UserId,
                                     ShoppingComplete
                                     )
                                     OUTPUT INSERTED.ID
                                     VALUES (
                                     @Quantity,
+                                    @ProductId,
+                                    @UserId,
                                     @ShoppingComplete
                                     )";
                     DbUtils.AddParameter(cmd, "@Quantity", shoppingCart.Quantity);
+                    DbUtils.AddParameter(cmd, "@ProductId", shoppingCart.ProductId);
+                    DbUtils.AddParameter(cmd, "@UserId", shoppingCart.UserId);
                     DbUtils.AddParameter(cmd, "@ShoppingComplete",false);
+
+                    cmd.ExecuteNonQuery();
+
+
 
                 }
             }

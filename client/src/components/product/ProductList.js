@@ -2,19 +2,17 @@ import React, { useEffect, useState } from "react";
 import Product from "./Product";
 import { getProducts } from "../../modules/productManager";
 import { Card, Button, ButtonGroup } from "reactstrap";
-import { addToCart } from "../../modules/cartManager";
-import { getUserDetailsById } from "../../modules/userManager";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
-
+  // fetches all products from the database and sets the state
   useEffect(() => {
     getProducts().then(setProducts);
   }, []);
 
+  // filters products based on search term
   const handleSearch = () => {
     if (searchTerm === "") {
       getProducts().then(setProducts);
@@ -22,11 +20,13 @@ export default function ProductList() {
       const searchResults = products.filter((product) =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      // sets the state to the filtered results
       setProducts(searchResults);
     }
   };
 
   const handleCategoryFilter = (categoryName) => {
+    // if the user clicks the same category button twice, reset the state
     setSelectedCategory(categoryName);
   };
 

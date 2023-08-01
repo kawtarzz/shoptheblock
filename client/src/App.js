@@ -5,21 +5,24 @@ import { onLoginStatusChange } from './modules/authManager';
 import ApplicationViews from './components/ApplicationViews';
 import firebase from 'firebase';
 import Header from './components/Header';
-import { getUserDetailsById } from './modules/userManager';
+import { getUserDetails } from './modules/authManager';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [user, setUser] = useState(null);
-
   // once connection is established set to true or false by the "onLoginStatusChange" function
   useEffect(() => {
     onLoginStatusChange(setIsLoggedIn);
+    console.log("isLoggedIn", isLoggedIn)
   }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
-      getUserDetailsById(firebase.auth().currentUser.uid).then(setUser);
+      getUserDetails(firebase.auth().currentUser.uid).then(
+        user =>
+          setUser(user)
+      );
     } else {
       setUser(null);
     }
@@ -36,7 +39,8 @@ function App() {
       <Router>
 
         <Header isLoggedIn={isLoggedIn} user={user} />
-        <ApplicationViews isLoggedIn={isLoggedIn} />
+
+        <ApplicationViews isLoggedIn={isLoggedIn} user={user} />
       </Router>
     </div>
   );

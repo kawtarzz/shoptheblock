@@ -73,7 +73,7 @@ namespace Fullstack_ECommerce_.Repositories
                     From Product p
                     LEFT JOIN Category c ON p.CategoryId = c.Id
                     WHERE p.Id = @Id
-                    ORDER BY p.Id;";
+                    ORDER BY p.Id";
 
                     DbUtils.AddParameter(cmd, "@Id", productId);
 

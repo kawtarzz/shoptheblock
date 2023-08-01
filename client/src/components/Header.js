@@ -3,7 +3,7 @@ import { Collapse, Navbar, NavLink, NavbarToggler, NavbarBrand, Nav, NavItem } f
 import { NavLink as RRNavLink } from "react-router-dom";
 import { logout } from "../modules/authManager";
 
-export default function Header({ isLoggedIn, user }) {
+export default function Header({ isLoggedIn }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
@@ -13,8 +13,6 @@ export default function Header({ isLoggedIn, user }) {
 
         <NavbarBrand tag={RRNavLink} to="/">Shop the Block</NavbarBrand>
 
-
-
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -22,7 +20,11 @@ export default function Header({ isLoggedIn, user }) {
             {isLoggedIn &&
               <>
                 <NavItem>
-                  <NavLink tag={RRNavLink} to="/products">Products</NavLink>
+                  <NavLink tag={RRNavLink} to="/">Home</NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/product">Products</NavLink>
                 </NavItem>
 
                 {/* category on nav should be a drop down menu */}
@@ -40,6 +42,10 @@ export default function Header({ isLoggedIn, user }) {
                   <NavLink tag={RRNavLink} to="/orders">Orders</NavLink>
                 </NavItem>
 
+                <NavItem>
+
+                  <NavLink tag={RRNavLink} to="/user/details">User Details</NavLink>
+                </NavItem>
 
                 <NavItem>
                   <a href aria-current="page" className="nav-link"

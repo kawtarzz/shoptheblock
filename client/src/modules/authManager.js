@@ -3,8 +3,6 @@ import "firebase/auth";
 
 const _apiUrl = "/api/user";
 
-
-
 export const getUserDetails = (firebaseUUID) => {
   return getToken().then(token => {
     return fetch(`${_apiUrl}/${firebaseUUID}`, {
