@@ -15,8 +15,6 @@ export const registerUser = (user) => {
   });
 };
 
-
-
 export const getAllUsers = () => {
   return getToken().then(token => {
     return fetch(baseUrl, {
