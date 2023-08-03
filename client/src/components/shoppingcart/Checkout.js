@@ -1,110 +1,53 @@
 import { Form, Button, ButtonGroup } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { getProductDetails } from "../../modules/productManager";
-import { getUserByFirebaseUserId } from "../../modules/userManager";
 import { Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Input } from "reactstrap";
-import { addToCart } from "../../modules/cartManager";
+import CheckoutForm from "./CheckoutForm";
 
-export default function CheckoutForm() {
+export default function Checkout({ user, firebaseUserId, cartItem, cartItems }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id } = useParams(), [product, setProduct] = useState({});
-  const [user, setUser] = useState({});
-  const [quantity, setQuantity] = useState(1);
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
-  const [cartItem, setCartItem] = useState({
-    productId: product.id,
-    userId: user.Id,
-    quantity: quantity,
 
-  });
-
-  const getUser = () => {
-    getUserByFirebaseUserId(currentUser.firebaseUserId).then(setUser);
-  };
-
-  const handleQuantityChange = (event) => {
-    setQuantity(event.target.value);
-  };
-
-  const handleCheckout = () => {
-    navigate(`/checkout`, { state: { background: location } })
-  };
-
+  console.log(cartItems, "cartItems")
   const sendToOrder = () => {
     navigate(`/order/confirmation`, { state: { background: location } })
   };
+  const confirmCheckout = () => {
+    // cartItems.ShoppingComplete = true;
+    // setCart([...cart]);
+    navigate(`/checkout/form`, { state: { background: location } })
+  }
 
+  console.log(cartItems, "cartItems")
 
   return (
-    <div>
-      <h1>Checkout</h1>
-      <Form>
-        <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <Input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Enter your name"
-            required
-          />
-
-
-          <label htmlFor="address">Address</label>
-          <Input
-            type="text"
-            name="address"
-            id="address"
-            placeholder="Entr your address"
-            required
-          />
-          <label htmlFor="city">City</label>
-          <Input
-            type="text"
-            name="city"
-            id="city"
-            placeholder="Enter your city"
-            required
-          />
-          <label htmlFor="state">State</label>
-          <Input
-            type="text"
-            name="state"
-            id="state"
-            placeholder="Enter your state"
-            required
-          />
-          <label htmlFor="zip">Zip</label>
-          <Input
-            type="text"
-            name="zip"
-            id="zip"
-            placeholder="Enter your zip"
-            required
-          />
-          <label htmlFor="phone">Phone</label>
-          <Input
-            type="text"
-            name="phone"
-            id="phone"
-            placeholder="Enter your phone"
-            required
-          />
-          <label htmlFor="email">Email</label>
-          <Input
-            type="text"
-            name="email"
-            id="email"
-            placeholder="Enter your email"
-            required />
+    <>
+      <Card>
+        <div className=" col-xs-12 col-sm-8 col-lg-4">
+          <h1>Checkout</h1>
+          <hr></hr>
+          <p> Shopping Cart Summary:</p>
+          <p> Item: ItemName</p>
+          <p>Item Price: Price</p>
+          <p>Quantity: Quantity</p>
+          <p>Subtotal: Subtotal</p>
+          <p>Tax: Tax</p>
+          <p>Total: Total</p>
         </div>
-        <ButtonGroup>
-          <Button color="primary" size="sm" onClick={handleCheckout}>Checkout</Button>
-        </ButtonGroup>
-      </Form>
-    </div>
+      </Card >
 
+
+      <div className="col-xs-12 col-sm-8 col-lg-4">
+        <div className="row d-flex justify-content-end">
+          <ButtonGroup>
+            <Button color="secondary" size="sm" onClick={() => navigate(`/product`, { state: { background: location } })}>Continue Shopping</Button>
+            <Button color="secondary" size="sm" onClick={() => navigate(`/shoppingcart`)}>Back to Shopping Cart</Button>
+            <Button color="primary" size="sm" onClick={confirmCheckout}>Confirm Checkout</Button>
+          </ButtonGroup>
+        </div>
+      </div>
+    </>
   )
 }
+{/* <CheckoutForm user={user} cartItem={cartItem} cartItems={cartItems} /> */ }
+

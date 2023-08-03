@@ -23,78 +23,28 @@ namespace Fullstack_ECommerce_.Repositories
                     cmd.CommandText = @"
                     SELECT sc.Id AS cartId, sc.Quantity, sc.UserId,
                     sc.ProductId, sc.ShoppingComplete, 
-                    u.[Id], u.FullName, u.FirebaseUserId,
-                        p.[Id] AS ProductId, p.Name AS ProductName, p.Price AS ProductPrice, p.ProductImage AS ProductImage
+                    up.[Id], up.FullName, up.FirebaseUserId,
+                        p.[Id] AS ProductId, p.[Name] AS ProductName, p.Price AS ProductPrice, p.ProductImage AS ProductImage
                         FROM ShoppingCart sc
-                        LEFT JOIN [User] u ON sc.UserId = u.Id
+                        LEFT JOIN [UserProfile] up ON sc.UserId = up.Id
                         LEFT JOIN [Product] p ON sc.ProductId = p.[Id]
                         ORDER BY sc.Id";
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        List<ShoppingCart> carts = new List<ShoppingCart>();
+                    using SqlDataReader reader = cmd.ExecuteReader();
+                    List<ShoppingCart> carts = new List<ShoppingCart>();
 
-                        while (reader.Read())
-                        {
-                            ShoppingCart cart = new ShoppingCart()
-                            {
-                                Id = DbUtils.GetInt(reader, "cartId"),
-                                Quantity = DbUtils.GetInt(reader, "Quantity"),
-                                UserId = DbUtils.GetInt(reader, "UserId"),
-                                User = new User()
-                                {
-                                    Id = DbUtils.GetInt(reader, "UserId"),
-                                    FullName = DbUtils.GetString(reader, "FullName"),
-                                    FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId")
-                                },
-                                ProductId = DbUtils.GetInt(reader, "ProductId"),
-                                Product = new Product()
-                                {
-                                    Id = DbUtils.GetInt(reader, "ProductId"),
-                                    Name = DbUtils.GetString(reader, "ProductName"),
-                                    Price = DbUtils.GetDec(reader, "ProductPrice"),
-                                    ProductImage = DbUtils.GetString(reader, "ProductImage")
-                                },
-                                ShoppingComplete = DbUtils.GetBool(reader, "ShoppingComplete")
-                            };
-                            carts.Add(cart);
-                        }
-                        return carts;
-                    }
-                }
-            }
-        }
-        public ShoppingCart GetById(int cartId)
-        {
-            using (SqlConnection conn = Connection)
-            {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"
-                    SELECT sc.Id AS cartId, sc.Quantity, sc.UserId,
-                    sc.ProductId, sc.ShoppingComplete, 
-                    u.[Id], u.FullName, u.FirebaseUserId,
-                    p.[Id] AS ProductId, p.Name AS ProductName, p.Price AS ProductPrice, p.ProductImage AS ProductImage
-                    FROM ShoppingCart sc
-                    JOIN [User] u ON sc.UserId = u.[Id]
-                    JOIN [Product] p ON sc.ProductId = p.[Id]
-                    WHERE sc.Id = @cartId";
-                    DbUtils.AddParameter(cmd, "@sc.Id", cartId);
-
-                    ShoppingCart shoppingCart = null;
-                    var reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        shoppingCart = new ShoppingCart()
+                        ShoppingCart cart = new ShoppingCart()
                         {
-                            Id = cartId,
+                            Id = DbUtils.GetInt(reader, "cartId"),
                             Quantity = DbUtils.GetInt(reader, "Quantity"),
                             UserId = DbUtils.GetInt(reader, "UserId"),
-                            User = new User()
+                            UserProfile = new UserProfile()
                             {
                                 Id = DbUtils.GetInt(reader, "UserId"),
                                 FullName = DbUtils.GetString(reader, "FullName"),
-                                FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId")
+                                FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                                Email = DbUtils.GetString(reader, "Email")
                             },
                             ProductId = DbUtils.GetInt(reader, "ProductId"),
                             Product = new Product()
@@ -106,13 +56,59 @@ namespace Fullstack_ECommerce_.Repositories
                             },
                             ShoppingComplete = DbUtils.GetBool(reader, "ShoppingComplete")
                         };
+                        carts.Add(cart);
                     }
-                    reader.Close();
-                    return shoppingCart;
+                    return carts;
                 }
             }
         }
+        public ShoppingCart GetById(int cartId)
+        {
+            using SqlConnection conn = Connection;
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    SELECT sc.[Id], sc.Quantity, sc.UserId,
+                    sc.ProductId, sc.ShoppingComplete, 
+                    up.[Id], up.FullName, up.FirebaseUserId, up.Email,
+                    p.[Id] AS ProductId, p.[Name] AS ProductName, p.Price AS ProductPrice, p.ProductImage AS ProductImage
+                    FROM ShoppingCart sc
+                    JOIN [UserProfile] up ON sc.UserId = up.[Id]
+                    JOIN [Product] p ON sc.ProductId = p.[Id]
+                    WHERE sc.Id = @cartId";
+                DbUtils.AddParameter(cmd, "@Id", cartId);
 
+                ShoppingCart shoppingCart = null;
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    shoppingCart = new ShoppingCart()
+                    {
+                        Id = cartId,
+                        Quantity = DbUtils.GetInt(reader, "Quantity"),
+                        UserId = DbUtils.GetInt(reader, "UserId"),
+                        UserProfile = new UserProfile()
+                        {
+                            Id = DbUtils.GetInt(reader, "UserId"),
+                            FullName = DbUtils.GetString(reader, "FullName"),
+                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId")
+                        },
+                        ProductId = DbUtils.GetInt(reader, "ProductId"),
+                        Product = new Product()
+                        {
+                            Id = DbUtils.GetInt(reader, "ProductId"),
+                            Name = DbUtils.GetString(reader, "ProductName"),
+                            Price = DbUtils.GetDec(reader, "ProductPrice"),
+                            ProductImage = DbUtils.GetString(reader, "ProductImage")
+                        },
+                        ShoppingComplete = DbUtils.GetBool(reader, "ShoppingComplete")
+                    };
+                }
+                reader.Close();
+                return shoppingCart;
+            }
+        }
 
         public void Add(ShoppingCart shoppingCart)
         {
@@ -120,9 +116,8 @@ namespace Fullstack_ECommerce_.Repositories
             {
                 conn.Open();
 
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"
+                using SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"
                         INSERT INTO ShoppingCart (
                                     Quantity,
                                     ProductId,
@@ -136,16 +131,12 @@ namespace Fullstack_ECommerce_.Repositories
                                     @UserId,
                                     @ShoppingComplete
                                     )";
-                    DbUtils.AddParameter(cmd, "@Quantity", shoppingCart.Quantity);
-                    DbUtils.AddParameter(cmd, "@ProductId", shoppingCart.ProductId);
-                    DbUtils.AddParameter(cmd, "@UserId", shoppingCart.UserId);
-                    DbUtils.AddParameter(cmd, "@ShoppingComplete",false);
+                DbUtils.AddParameter(cmd, "@Quantity", shoppingCart.Quantity);
+                DbUtils.AddParameter(cmd, "@ProductId", shoppingCart.ProductId);
+                DbUtils.AddParameter(cmd, "@UserId", shoppingCart.UserId);
+                DbUtils.AddParameter(cmd, "@ShoppingComplete", false);
 
-                    cmd.ExecuteNonQuery();
-
-
-
-                }
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -158,10 +149,10 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @" 
-                        SELECT sc.Id, sc.Quantity, sc.UserId, sc.ProductId, sc.ShoppingComplete, u.Id, u.FullName, u.FirebaseUserId
+                        SELECT sc.[Id], sc.Quantity, sc.UserId, sc.ProductId, sc.ShoppingComplete, up.[Id], up.FullName, up.FirebaseUserId, up.[Email]
                         FROM ShoppingCart sc
-                        JOIN [User] u ON sc.UserId = u.Id
-                        WHERE u.FirebaseUserId = @firebaseUserId";
+                        JOIN [UserProfile] up ON sc.UserId = up.[Id]
+                        WHERE up.FirebaseUserId = @firebaseUserId";
 
                     DbUtils.AddParameter(cmd, "@firebaseUserId", firebaseUserId);
 
@@ -175,7 +166,7 @@ namespace Fullstack_ECommerce_.Repositories
                             Id = DbUtils.GetInt(reader, "Id"),
                             Quantity = DbUtils.GetInt(reader, "Quantity"),
                             UserId = DbUtils.GetInt(reader, "UserId"),
-                            User = new User()
+                            UserProfile = new UserProfile()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 FullName = DbUtils.GetString(reader, "FullName"),

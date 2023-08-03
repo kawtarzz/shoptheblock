@@ -6,8 +6,15 @@ import ProductDetails from "./product/ProductDetails";
 import ProductList from "./product/ProductList";
 import { Navigate } from "react-router-dom";
 import ShoppingCart from "./shoppingcart/ShoppingCart";
+import { Home } from "./Home";
+import UserDetails from "./user/UserDetails";
+import { Link } from "react-router-dom";
+import { CardFooter, CardSubtitle, Card, CardHeader } from "reactstrap";
+import { Footer } from "./Footer";
+import Checkout from "./shoppingcart/Checkout";
+import CheckoutForm from "./shoppingcart/CheckoutForm";
+import { OrderConfirmation } from "./shoppingcart/OrderConfirmation";
 
-// 
 export default function ApplicationViews({ isLoggedIn, user }) {
   return (
     <main>
@@ -15,18 +22,35 @@ export default function ApplicationViews({ isLoggedIn, user }) {
         <Route path="/">
           <Route
             index
-            element={isLoggedIn ? <ProductList /> : <Navigate to="/login" />}
+            element={isLoggedIn ? <Home user={user} /> : <Navigate to="/login" />}
           />
+
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="product" element={isLoggedIn ? <ProductList /> : <Navigate to="/login" />} />
 
-          <Route path="ShoppingCart" element={isLoggedIn ? <ShoppingCart /> : <Navigate to="/login" />} />
+          <Route path="product" element={isLoggedIn ? <ProductList user={user} /> : <Navigate to="/login" />} />
+
+          <Route path="shoppingCart" element={isLoggedIn ? <ShoppingCart user={user} /> : <Navigate to="/login" />} />
+
+          <Route path="checkout" element={isLoggedIn ? <Checkout user={user} /> : <Navigate to="/login" />} />
+
+          <Route path="checkout" element={isLoggedIn ? <Checkout user={user} /> : <Navigate to="/login" />} />
+
+          <Route path="checkout/form" element={isLoggedIn ? <CheckoutForm user={user} /> : <Navigate to="/login" />} />
+          <Route path="order/confirmation" element={isLoggedIn ? <OrderConfirmation user={user} /> : <Navigate to="/login" />} />
+
+
           <Route path="productDetails/:id" element={isLoggedIn ? <ProductDetails user={user} /> : <Navigate to="/login" />
+          } />
+          <Route path="/userprofile/details/:id" element={isLoggedIn ?
+            <UserDetails user={user} /> : <Navigate to="/login" />
           } />
 
         </Route>
       </Routes>
+      <Footer />
+
+
     </main>
   )
 };

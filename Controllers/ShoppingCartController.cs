@@ -18,16 +18,10 @@ namespace Fullstack_ECommerce_.Controllers
     public class ShoppingCartController : ControllerBase
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IProductRepository _productRepository;
 
-
-
-        public ShoppingCartController(IShoppingCartRepository shoppingCartRepository, IProductRepository productRepository, IUserRepository userRepository)
+        public ShoppingCartController(IShoppingCartRepository shoppingCartRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
-            _productRepository = productRepository;
-            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -68,8 +62,5 @@ namespace Fullstack_ECommerce_.Controllers
             return CreatedAtAction("GET", new { newCart.Id }, newCart);
           
         }
-
-       
-
     }
 }

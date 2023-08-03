@@ -13,8 +13,12 @@ export default function Product({ product }) {
 
   return (
     <Card className="m-4" style={{ 'borderRadius': '3px' }}>
-      <CardTitle tag="h5" onClick={handleDetails}>{product.name}</CardTitle>
-      <CardSubtitle tag="h6" className="mb-2 text-muted">{product.category?.name}</CardSubtitle>
+      <CardTitle tag="h5" onClick={handleDetails}>
+        {product.name}
+      </CardTitle>
+      <CardSubtitle tag="h6" className="mb-2 text-muted">
+        {product.category?.name}
+      </CardSubtitle>
       <CardImg top width="100%" src={product.productImage} alt="Product Image" onClick={handleDetails} />
       <CardBody>
         <CardText>Price: ${product.price}</CardText>
