@@ -2,71 +2,93 @@ import React, { useState } from "react";
 import { Collapse, Navbar, NavLink, NavbarToggler, NavbarBrand, Nav, NavItem } from 'reactstrap';
 import { NavLink as RRNavLink } from "react-router-dom";
 import { logout } from "../modules/authManager";
+import CheckoutForm from "./shoppingcart/Checkout";
+import ShoppingCart from "./shoppingcart/ShoppingCart";
 
-export default function Header({ isLoggedIn }) {
+
+// add padding to nav bar links and make them bigger
+export default function Header({ isLoggedIn, user }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
+
   return (
-    <div>
+    <>
+      <div>
+        <Navbar color="light" light expand="md">
+
+          <NavbarBrand tag={RRNavLink} to="/">Shop the Block</NavbarBrand>
+
+          <NavbarToggler onClick={toggle} />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav className="mr-auto" navbar>
+
+              {isLoggedIn &&
+                <>
+                  <NavItem>
+                    <NavLink tag={RRNavLink} to="/product">Shop All</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={RRNavLink} to="/categories">Shop by Category</NavLink>
+                  </NavItem>
+                </>
+              }
+              { /* When isLoggedIn === false, we will render the Login link */}
+              {!isLoggedIn &&
+                <>
+                  <NavItem>
+                    <NavLink tag={RRNavLink} to="/login">Login</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={RRNavLink} to="/register">Register</NavLink>
+                  </NavItem>
+                </>
+              }
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
+      <>
+        <NavItem>
+          <UserHeader />
+
+        </NavItem>
+      </>
+    </>
+
+  );
+}
+
+const UserHeader = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
+
+  return (
+
+    <>
+
       <Navbar color="light" light expand="md">
+        <NavbarToggler onClick={toggleDropdown} />
+        <Collapse isOpen={dropdownOpen} navbar>
+          <Nav>
 
-        <NavbarBrand tag={RRNavLink} to="/">Shop the Block</NavbarBrand>
+            <NavItem>
+              <NavLink tag={RRNavLink} to="/shoppingCart">Shopping Cart</NavLink>
+            </NavItem>
 
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar>
-
-            {isLoggedIn &&
-              <>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/">Home</NavLink>
-                </NavItem>
-
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/product">Products</NavLink>
-                </NavItem>
-
-                {/* category on nav should be a drop down menu */}
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/categories">Categories</NavLink>
-                </NavItem>
-
-
-
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/shoppingcart">Shopping Cart</NavLink>
-                </NavItem>
-
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/orders">Orders</NavLink>
-                </NavItem>
-
-                <NavItem>
-
-                  <NavLink tag={RRNavLink} to="/user/details">User Details</NavLink>
-                </NavItem>
-
-                <NavItem>
-                  <a href aria-current="page" className="nav-link"
-                    style={{ cursor: "pointer" }} onClick={logout}>Logout</a>
-                </NavItem>
-              </>
-            }
-            { /* When isLoggedIn === false, we will render the Login link */}
-            {!isLoggedIn &&
-              <>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/login">Login</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/register">Register</NavLink>
-                </NavItem>
-              </>
-            }
+            <NavItem>
+              <NavLink tag={RRNavLink} to="/order">Orders</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={RRNavLink} to="/userprofile/details/:id">My Account</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={RRNavLink} className="nav-link"
+                style={{ cursor: "pointer" }} onClick={logout}>Logout</NavLink>
+            </NavItem>
           </Nav>
         </Collapse>
       </Navbar>
-    </div>
+    </>
   );
-} 
+}

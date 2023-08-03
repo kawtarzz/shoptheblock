@@ -2,7 +2,7 @@ import firebase from "firebase/app"
 import "firebase/auth";
 import { getToken } from "./authManager";
 
-const apiUrl = "/api/ShoppingCart";
+const apiUrl = "/api/shoppingCart";
 
 export const getUserCartByFirebaseId = (firebaseUserId) => {
   return getToken().then((token) => {
@@ -20,7 +20,6 @@ export const getUserCartByFirebaseId = (firebaseUserId) => {
     });
   });
 };
-
 
 export const getShoppingCart = () => {
   return getToken().then((token) => {

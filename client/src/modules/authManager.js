@@ -1,7 +1,10 @@
 import firebase from "firebase/app"
 import "firebase/auth";
 
-const _apiUrl = "/api/user";
+const _apiUrl = "/api/userprofile";
+
+// this module is responsible for all the authentication and authorization
+// admin only has access to the user profiles
 
 export const getUserDetails = (firebaseUUID) => {
   return getToken().then(token => {
@@ -24,6 +27,7 @@ const _doesUserExist = (firebaseUserId) => {
     }).then(resp => resp.json()));
 };
 
+
 const _saveUser = (user) => {
   return getToken().then((token) => {
     return fetch(`${_apiUrl}`, {
@@ -37,7 +41,9 @@ const _saveUser = (user) => {
   });
 };
 
+
 export const getToken = () => firebase.auth().currentUser.getIdToken();
+
 
 export const login = (email, password) => {
   return firebase.auth().signInWithEmailAndPassword(email, password).then((signInResponse) => _doesUserExist(signInResponse.user.uid))
@@ -71,4 +77,14 @@ export const onLoginStatusChange = (onLoginStatusChangeHandler) => {
   });
 }
 
-
+export const getAllUserProfiles = () => {
+  return getToken().then(token => {
+    return fetch(baseUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+      .then(res => res.json())
+  })
+};

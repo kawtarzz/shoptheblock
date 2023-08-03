@@ -1,16 +1,15 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'reactstrap';
-import { onLoginStatusChange } from './modules/authManager';
+import { onLoginStatusChange, getUserDetails } from './modules/authManager';
 import ApplicationViews from './components/ApplicationViews';
-import firebase from 'firebase';
 import Header from './components/Header';
-import { getUserDetails } from './modules/authManager';
+import firebase from 'firebase';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({ id: 0, fullName: "", email: "", password: "", profilePic: "" });
   // once connection is established set to true or false by the "onLoginStatusChange" function
   useEffect(() => {
     onLoginStatusChange(setIsLoggedIn);
@@ -19,14 +18,9 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      getUserDetails(firebase.auth().currentUser.uid).then(
-        user =>
-          setUser(user)
-      );
-    } else {
-      setUser(null);
+      getUserDetails(firebase.auth().currentUser.uid).then(user => setUser(user));
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn])
 
   // The "isLoggedIn" state variable will be null until //  the app's connection to firebase has been established.
   if (isLoggedIn === null) {
@@ -37,7 +31,6 @@ function App() {
   return (
     <div className="App">
       <Router>
-
         <Header isLoggedIn={isLoggedIn} user={user} />
 
         <ApplicationViews isLoggedIn={isLoggedIn} user={user} />

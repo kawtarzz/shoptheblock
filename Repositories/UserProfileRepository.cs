@@ -10,11 +10,11 @@ using Microsoft.VisualBasic.CompilerServices;
 
 namespace Fullstack_ECommerce_.Repositories
 {
-    public class UserRepository : BaseRepository, IUserRepository
+    public class UserProfileRepository : BaseRepository, IUserProfileRepository
     {
-        public UserRepository(IConfiguration configuration) : base(configuration) { }
+        public UserProfileRepository(IConfiguration configuration) : base(configuration) { }
 
-        public User GetByFirebaseUserId(string firebaseUserId)
+        public UserProfile GetByFirebaseUserId(string firebaseUserId)
         {
             using (var conn = Connection)
             {
@@ -25,23 +25,23 @@ namespace Fullstack_ECommerce_.Repositories
                         SELECT Id, FullName, 
                         Email, Password, FirebaseUserId, 
                         ProfilePic
-                        FROM [User]
-                        WHERE FirebaseUserId = @FirebaseuserId";
+                        FROM [UserProfile]
+                        WHERE FirebaseUserId = @FirebaseUserId";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
 
-                    User user = null;
+                    UserProfile user = null;
 
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
-                        user = new User()
+                        user = new UserProfile()
                         {
                             Id = DbUtils.GetInt(reader, "Id"),
                             FullName = DbUtils.GetString(reader, "FullName"),
                             Email = DbUtils.GetString(reader, "Email"),
                             Password = DbUtils.GetString(reader, "Password"),
-                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                            FirebaseUserId = firebaseUserId,
                             ProfilePic = DbUtils.GetString(reader, "ProfilePic")
                         };
                     }
@@ -52,7 +52,7 @@ namespace Fullstack_ECommerce_.Repositories
             }
         }
           
-        public User GetById(int userId)
+        public UserProfile GetById(int userId)
         {
             using (var conn = Connection)
             {
@@ -61,22 +61,22 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT 
-                        u.Id AS userId, u.FullName, u.Email, u.Password, 
-                        u.FirebaseUserId, u.ProfilePic
-                        FROM [User] u
-                        WHERE u.Id = @userId"
+                        Id AS userId, FullName, Email, Password, 
+                        FirebaseUserId, ProfilePic
+                        FROM [UserProfile]
+                        WHERE Id = @userId"
 ;
 
-                    DbUtils.AddParameter(cmd, "@userId", userId);
+                    DbUtils.AddParameter(cmd, "@UserId", userId);
 
-                    User user = null;
+                    UserProfile user = null;
 
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
-                        user = new User()
+                        user = new UserProfile()
                         {
-                            Id = DbUtils.GetInt(reader, "userId"),
+                            Id = userId,
                             FullName = DbUtils.GetString(reader, "FullName"),
                             Email = DbUtils.GetString(reader, "Email"),
                             Password = DbUtils.GetString(reader, "Password"),
@@ -91,33 +91,32 @@ namespace Fullstack_ECommerce_.Repositories
             }
         }
 
-        public List<User> GetUsers()
+        public List<UserProfile> GetUsers()
         {
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT 
-                                        Id, FullName,
-                                        Email, Password, FirebaseUserId,
-                                        ProfilePic
-                                        FROM [User] 
-                                        ORDER BY FullName";
+                    cmd.CommandText = @"
+                            SELECT
+                                Id, FirebaseUserId, FullName, 
+                                Email, ProfilePic
+                           FROM UserProfile
+                           ORDER BY Id";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var users = new List<User>();
+                        var users = new List<UserProfile>();
                         while (reader.Read())
                         {
-                            users.Add(new User()
+                            users.Add(new UserProfile()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
+                                FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
                                 FullName = DbUtils.GetString(reader, "FullName"),
                                 Email = DbUtils.GetString(reader, "Email"),
-                                Password = DbUtils.GetString(reader, "Password"),
-                                FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
-                                ProfilePic = DbUtils.GetString(reader, "ProfilePic")
+                                ProfilePic = DbUtils.GetString(reader, "ProfilePic"),
                             });
                         }
                         return users;
@@ -126,14 +125,14 @@ namespace Fullstack_ECommerce_.Repositories
             }
         }
 
-        public void Add(User user)
+        public void Add(UserProfile userProfile)
         {
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO [User] (
+                    cmd.CommandText = @"INSERT INTO [UserProfile] (
                                         FullName, 
                                         Email,
                                         Password, 
@@ -148,35 +147,35 @@ namespace Fullstack_ECommerce_.Repositories
                                         @FirebaseUserId,  
                                         @ProfilePic
                                         )";
-                    DbUtils.AddParameter(cmd, "@FullName", user.FullName);
-                    DbUtils.AddParameter(cmd, "@Email", user.Email);
-                    DbUtils.AddParameter(cmd, "@Password", user.Password);
-                    DbUtils.AddParameter(cmd, "@FirebaseUserId", user.FirebaseUserId);
-                    DbUtils.AddParameter(cmd, "@ProfilePic", user.ProfilePic);
+                    DbUtils.AddParameter(cmd, "@FullName", userProfile.FullName);
+                    DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
+                    DbUtils.AddParameter(cmd, "@Password", userProfile.Password);
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", userProfile.FirebaseUserId);
+                    DbUtils.AddParameter(cmd, "@ProfilePic", userProfile.ProfilePic);
 
-                    user.Id = (int)cmd.ExecuteScalar();
+                    userProfile.Id = (int)cmd.ExecuteScalar();
                 }
             }
         }
 
-        public void Update(User user)
+        public void Update(UserProfile userProfile)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"UPDATE User
-                                        SET FullName = @fullName,
-                                            Email = @email,
-                                            Password = @password,
-                                            ProfilePic = @profilePic,
-                                        WHERE Id = @id";
-                    DbUtils.AddParameter(cmd, "@fullName", user.FullName);
-                    DbUtils.AddParameter(cmd, "@email", user.Email);
-                    DbUtils.AddParameter(cmd, "@password", user.Password);
-                    DbUtils.AddParameter(cmd, "@profilePic", user.ProfilePic);
-                    DbUtils.AddParameter(cmd, "@id", user.Id);
+                    cmd.CommandText = @"UPDATE [UserProfile]
+                                        SET FullName = @FullName,
+                                            Email = @Email,
+                                            Password = @Password,
+                                            ProfilePic = @ProfilePic,
+                                        WHERE Id = @Id";
+                    DbUtils.AddParameter(cmd, "@FullName", userProfile.FullName);
+                    DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
+                    DbUtils.AddParameter(cmd, "@Password", userProfile.Password);
+                    DbUtils.AddParameter(cmd, "@ProfilePic", userProfile.ProfilePic);
+                    DbUtils.AddParameter(cmd, "@Id", userProfile.Id);
 
                     cmd.ExecuteNonQuery();
                 }

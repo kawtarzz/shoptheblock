@@ -14,7 +14,7 @@ namespace Fullstack_ECommerce_.Models
         public int ProductId { get; set; }
         public bool ShoppingComplete { get; set; }
         public Product Product { get; set; }
-        public User User { get; set; }
+        public UserProfile UserProfile { get; set; }
 
     }
 }
