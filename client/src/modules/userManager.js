@@ -1,35 +1,13 @@
 import { getToken } from "./authManager";
 
-const baseUrl = "/api/User";
+const baseUrl = "/api/userprofile";
 
-export const registerUser = (user) => {
-  return getToken().then((token) => {
-    return fetch(`${baseUrl}/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(user),
-    }).then((res) => res.json());
-  });
-};
+// this module is responsible for all fetch calls to the userprofile table in the database
+// user has access to these controls when logged in
 
-export const getAllUsers = () => {
+export const getUserDetailsById = (userId) => {
   return getToken().then(token => {
-    return fetch(baseUrl, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    })
-      .then(res => res.json())
-  })
-};
-
-export const getUserDetailsById = (id) => {
-  return getToken().then(token => {
-    return fetch(`${baseUrl}/details/${id}`, {
+    return fetch(`${baseUrl}/details/${userId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -38,25 +16,6 @@ export const getUserDetailsById = (id) => {
       .then(res => res.json())
   })
 }
-
-export const getUser = (firebaseUserId) => {
-  return getToken().then(token => {
-    return fetch(`${baseUrl}/${firebaseUserId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-      .then(res => {
-        if (res.status === 404) {
-          return null
-        } else {
-          return res.json()
-        }
-      })
-  })
-}
-
 
 export const updateUser = (userObj) => {
   return getToken().then(token => {

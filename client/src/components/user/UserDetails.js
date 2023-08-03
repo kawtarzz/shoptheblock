@@ -1,43 +1,43 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useLocation } from 'react-router-dom'
-import { Card, CardImg, CardText, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup, Input } from "reactstrap"
+import { Card, CardImg, CardText, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup, Input, CardGroup } from "reactstrap"
 import { getUser } from "../../modules/userManager";
 import { getUserDetailsById } from "../../modules/userManager";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 
-export default function UserDetails() {
+export default function UserDetails({ user }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
-
-  const { id } = useParams(), [user, setUser] = useState({});
+  console.log(user, "user")
 
 
-  useEffect(() => {
-    getUserDetailsById(id).then(setUser);
-    console.log("user", user)
-  }, []);
 
   if (user === null) {
-    return <p>Sorry, there is no user with id of {id}</p>
+    return <p>Sorry, there is no user with id of {user.id}</p>
   } else {
     return (
       <>
         <Card key={user.id} >
-          <Button color="primary" size="x-sm" onClick={() => navigate(`/`)}>Back to Shop</Button>
-          <CardTitle tag="h5">{user.fullName}</CardTitle>
-          <CardSubtitle tag="h6" className="mb-2 text-muted">{user.email}</CardSubtitle>
-          <Button color="primary" size="x-sm" onClick={() => navigate(`/user/edit/${user.id}`)}>Edit</Button>
-
           <CardImg top width="100%" src={user.profilePic} alt="Card image cap" />
-
+          <br></br>
+          <CardTitle tag="h">
+          </CardTitle>
+          <hr></hr>
+          <CardBody style={{ alignContent: "center" }}>
+            <b>Name:</b>  {user.fullName}
+            <br></br>
+            <b>Email:</b> {user.email}
+          </CardBody>
+          <hr></hr>
+          <ButtonGroup>
+            <Button variant="primary" onClick={() => navigate(`/userprofile/edit/${user.id}`)}>Edit</Button>
+            <Button variant="danger" onClick={() => navigate(`/userprofile/delete/${user.id}`)}>Delete My Account</Button>
+          </ButtonGroup>
         </Card>
       </>
-
-
     )
   }
 }

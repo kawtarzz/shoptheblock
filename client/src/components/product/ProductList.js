@@ -70,7 +70,6 @@ export default function ProductList() {
                   col-sm-8
                   col-lg-4">
               <Product key={product.id} product={product} />
-
             </div>
           ))}
         </div>
