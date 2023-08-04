@@ -14,7 +14,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class PaymentTypeController : ControllerBase
     {
         private readonly IPaymentTypeRepository _paymentTypeRepository;

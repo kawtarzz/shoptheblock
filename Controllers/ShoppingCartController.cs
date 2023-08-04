@@ -14,7 +14,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ShoppingCartController : ControllerBase
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
@@ -61,19 +61,6 @@ namespace Fullstack_ECommerce_.Controllers
             _shoppingCartRepository.Add(newCart);
             return CreatedAtAction("GET", new { newCart.Id }, newCart);
           
-        }
-
-        [HttpDelete("{cartId}")]
-        public IActionResult Delete([FromRoute] int cartId)
-        {
-          try { 
-            _shoppingCartRepository.Delete(cartId);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
         }
     }
 }
