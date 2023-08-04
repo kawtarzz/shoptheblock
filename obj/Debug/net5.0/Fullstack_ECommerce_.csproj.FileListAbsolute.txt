@@ -49,4 +49,3 @@ C:\Users\kawta\workspace\Fullstack_ECommerce_\obj\Debug\net5.0\Fullstack_ECommer
 C:\Users\kawta\workspace\Fullstack_ECommerce_\obj\Debug\net5.0\Fullstack_ECommerce_.genruntimeconfig.cache
 C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\appsettings.json
 C:\Users\kawta\workspace\Fullstack_ECommerce_\bin\Debug\net5.0\appsettings.Development.json
-C:\Users\kawta\workspace\Fullstack_ECommerce_\obj\Debug\net5.0\Fullstack_ECommerce_.csproj.AssemblyReference.cache
