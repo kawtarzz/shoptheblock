@@ -3,12 +3,13 @@ import { getProductDetails } from "../../modules/productManager";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom'
-import { Card, Button, ButtonGroup, CardImg, CardText, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
+import { Card, Button, ButtonGroup, CardImg, CardText, CardBody, CardTitle, CardSubtitle, ButtonDropdown, ButtonToggle, Collapse } from 'reactstrap';
 import { Input } from "reactstrap";
 import { addToCart } from "../../modules/cartManager";
 import { getUserCartByFirebaseId } from "../../modules/cartManager";
 import ShoppingCart from "../shoppingcart/ShoppingCart";
 import CartItem from "../shoppingcart/CartItem";
+import "./Product.css";
 
 
 export default function ProductDetails({ user }) {
@@ -20,6 +21,8 @@ export default function ProductDetails({ user }) {
   const [cart, setCart] = useState([]);
   const [isLowStock, setIsLowStock] = useState(false);
   const [isProduct, setIsProduct] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
 
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value);
@@ -37,39 +40,26 @@ export default function ProductDetails({ user }) {
 
 
   const handleAddToCart = () => {
-    if (cartItem.productId === product.id) {
-      const newCartItem = { ...cartItem };
-      newCartItem.userId = user.id;
-      newCartItem.product = product;
-      newCartItem.quantity = quantity;
-      newCartItem.productId = product.id;
-      newCartItem.productImage = product.productImage;
-      newCartItem.productName = product.name;
-      newCartItem.productPrice = product.price;
-      newCartItem.productDescription = product.description;
-      newCartItem.productCategory = product.category;
-      newCartItem.productStock = product.stock;
-      newCartItem.shoppingComplete = false;
-      addToCart(newCartItem).then(() => {
-        cart.push(newCartItem);
-        setCart([...cart]);
+    const cartItem = {
 
-      }
-      )
+      userId: user.id,
+      product: product,
+      quantity: quantity,
+      productId: product.id,
+      productImage: product.productImage,
+      productName: product.name,
+      productPrice: product.price,
+      productDescription: product.description,
+      productCategory: product.category,
+      productStock: product.stock,
+      shoppingComplete: false
     }
+    addToCart(cartItem).then(() => {
+      cart.push(cartItem);
+      setCart([...cart]);
+    }
+    )
   }
-
-  // } else {
-  //   const cartItem = {
-  //     productId: product.id,
-  //     quantity: quantity,
-  //     userId: user.id,
-  //     shoppingComplete: false,
-  //   };
-  //   addToCart(cartItem).then(() => {
-  //     cart.push(cartItem);
-  //     setCart([...cart]);
-  //   });
 
   useEffect(() => {
     getUserCartByFirebaseId(user.firebaseUserId).then(setCart);
@@ -86,6 +76,7 @@ export default function ProductDetails({ user }) {
   }, [product])
 
 
+
   if (product === null) {
     return <p>Sorry, there is no product with id of {id}</p>
   } else {
@@ -93,7 +84,9 @@ export default function ProductDetails({ user }) {
       <Card key={product.id} >
         <CardTitle tag="h5">{product.name}</CardTitle>
         <CardSubtitle tag="h6" className="mb-2 text-muted">{product.category?.name}</CardSubtitle>
-        <CardImg top width="100%" src={product.productImage} alt="Card image cap" />
+        <div className="box">
+          <img src={product.productImage} top width="100%" alt="Card image cap" />
+        </div>
         <CardBody>
           <hr></hr>
           <CardText>{product.description}</CardText>
@@ -114,13 +107,26 @@ export default function ProductDetails({ user }) {
             <Button color="primary" size="sm" onClick={handleOpenShoppingCart}>View Cart</Button>
             <Button color="primary" size="sm" onClick={handleCheckout}>Checkout</Button>
           </ButtonGroup>
+          <div>
+          </div>
         </CardBody>
       </Card >
-      {/* <CartItem key={product.id} user={user} cartItem={cartItem} /> */}
-      {/* <ShoppingCart key={cartItem.id} user={user} cartItem={cartItem} product={product} cart={cart} /> */}
     </>
     )
   }
 }
 
 
+  // <CartItem key={product.id} user={user} cartItem={cartItem} /> * /}
+  //   < ShoppingCart key = { cartItem.id } user = { user } cartItem = { cartItem } cart = { cart } /> * /}
+
+  //     < Navbar color = "light" light expand = "md" >
+  //       <NavbarToggler onClick={toggle}>
+  //         <Collapse isOpen={isOpen} navbar>
+  //           <Nav className="mr-auto" navbar>
+  //             <NavItem>
+  //               <ShoppingCart key={cartItem.id} user={user} cartItem={cartItem} cart={cart} />
+  //             </NavItem>
+  //           </Nav>
+  //         </Collapse>
+  //       </NavbarToggler>

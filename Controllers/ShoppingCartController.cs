@@ -62,5 +62,18 @@ namespace Fullstack_ECommerce_.Controllers
             return CreatedAtAction("GET", new { newCart.Id }, newCart);
           
         }
+
+        [HttpDelete("{cartId}")]
+        public IActionResult Delete([FromRoute] int cartId)
+        {
+          try { 
+            _shoppingCartRepository.Delete(cartId);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

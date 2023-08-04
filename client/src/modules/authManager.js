@@ -79,7 +79,7 @@ export const onLoginStatusChange = (onLoginStatusChangeHandler) => {
 
 export const getAllUserProfiles = () => {
   return getToken().then(token => {
-    return fetch(baseUrl, {
+    return fetch(_apiUrl, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
