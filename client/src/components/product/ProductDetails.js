@@ -20,7 +20,6 @@ export default function ProductDetails({ user }) {
   const [cartItem, setCartItem] = useState({});
   const [cart, setCart] = useState([]);
   const [isLowStock, setIsLowStock] = useState(false);
-  const [isProduct, setIsProduct] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 

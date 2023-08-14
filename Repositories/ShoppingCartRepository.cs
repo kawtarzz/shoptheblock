@@ -85,13 +85,14 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     shoppingCart = new ShoppingCart()
                     {
-                        Id = DbUtils.GetInt(reader,"cartId"),
+                        Id = DbUtils.GetInt(reader, "cartId"),
                         Quantity = DbUtils.GetInt(reader, "Quantity"),
                         UserId = DbUtils.GetInt(reader, "UserId"),
                         UserProfile = new UserProfile()
                         {
                             Id = DbUtils.GetInt(reader, "UserId"),
                             FullName = DbUtils.GetString(reader, "FullName"),
+                            Email = DbUtils.GetString(reader, "Email"),
                             FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId")
                         },
                         ProductId = DbUtils.GetInt(reader, "ProductId"),
@@ -157,6 +158,8 @@ namespace Fullstack_ECommerce_.Repositories
                 }
             }
         }
+
+
 
 
         public List<ShoppingCart> GetUserCartByFirebaseId(string firebaseUserId)

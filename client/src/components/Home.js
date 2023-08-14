@@ -20,6 +20,7 @@ export const Home = ({ user }) => {
       </CardHeader>
       <CardBody>
         <CardText>Here are some of our featured products</CardText>
+        <img src="https://onedrive.live.com/embed?resid=DEB0002FC4BFD90D%2133379&authkey=%21AAbh091VqXyTWtI&width=1024" />
       </CardBody>
 
 

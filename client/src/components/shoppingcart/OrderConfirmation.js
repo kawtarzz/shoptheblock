@@ -10,7 +10,7 @@ export const OrderConfirmation = () => {
 
   return (
     <>
-      <Card>
+      <Card className="box-checkout" style={{ width: '60rem' }}>
         <CardHeader>
           <CardTitle tag="h3">
             Thank you for your order!

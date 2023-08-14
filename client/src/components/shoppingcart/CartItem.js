@@ -33,7 +33,6 @@ export default function CartItem({ cartItem, product, user, cart, setCart, setCa
         setCart([...cart]);
       });
     }
-    console.log(cart, "cart")
   }
 
 

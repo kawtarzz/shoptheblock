@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import Product from "./Product";
 import { getProducts } from "../../modules/productManager";
 import { Card, Button, ButtonGroup } from "reactstrap";
+import { Input } from "reactstrap";
+import "./Product.css";
+import Container from "reactstrap/lib/Container";
+import Label from "reactstrap/lib/Label";
+import Row from "reactstrap/lib/Row";
+import Col from "reactstrap/lib/Col";
+import { MenuItem, MenuList, Stack } from "@mui/material";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -27,7 +34,9 @@ export default function ProductList() {
 
   const handleCategoryFilter = (categoryName) => {
     // if the user clicks the same category button twice, reset the state
-    setSelectedCategory(categoryName);
+    setSelectedCategory(categoryName === "all" ? null : categoryName);
+
+
   };
 
   // extract unique category names from products
@@ -36,46 +45,77 @@ export default function ProductList() {
   const filteredProducts = selectedCategory ? products.filter((p) => p.category.name === selectedCategory) : products;
 
   return (
-    <><Card>
-      <div className="row justify-content-center">
-        <input
-          type="text"
-          placeholder="Search for a product"
-          value={searchTerm}
-          onChange={(evt) => setSearchTerm(evt.target.value)}
-        />
-        <Button color="primary" size="sm" onClick={handleSearch}>Search</Button>
-      </div>
-      <h1>Products</h1>
-      <div className="button-group">
-        <ButtonGroup>
-          <Button color="primary" size="sm" onClick={() => handleCategoryFilter(null)}>All Products</Button>
+    <>
+      <Container
+        className="justify-content-center">
+        <Card>
 
-          {categoryNames.map((categoryName) => (
-            <Button
-              key={categoryName} outline color="primary" size="sm"
-              onClick={() => handleCategoryFilter(categoryName)}
-            >
-              {categoryName}
-            </Button>
-          ))}
-        </ButtonGroup>
-      </div>
+          <Stack direction="horizontal" gap={4}>
+            <Row>
+              <Col sm={2}>
+                <MenuItem>
+                  <MenuList>
+                    <Label htmlFor="label-text">Filter by Category: </Label>
+                    <select
+                      name="category"
+                      id="category"
+                      onChange={(evt) => handleCategoryFilter(evt.target.value)}
+                    >
+                      <option value="all">All Products</option>
+                      {categoryNames.map((categoryName) => (
+                        <option key={categoryName} value={categoryName}>
+                          {categoryName}
+                        </option>
+                      ))}
+                    </select>
+                  </MenuList>
+                </MenuItem>
+              </Col>
+            </Row>
+          </Stack>
+          <Row>
 
-      <div className="card">
-        <div className="row">
-          {filteredProducts.map((product) => (
-            <div key={product.id} className="
-              col-xs-12
-                  col-sm-8
-                  col-lg-4">
-              <Product key={product.id} product={product} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </Card>
+            <Col xs={{ order: 12 }}>
+
+              <Label htmlFor="label-text">Sort by: </Label>
+
+              <Button onClick={() => {
+                const sortedProducts = [...products].sort((a, b) => a.price - b.price)
+                setProducts(sortedProducts)
+              }}>Price: Lowest first</Button>
+
+              <Col xs={{ order: 1 }}>
+                <div className="p-4 me-auto inline">
+                  <Label htmlFor="label-text">Search: </Label>
+                  <Input className="me-auto"
+                    placeholder="Search for a product"
+                    value={searchTerm}
+                    onChange={(evt) => setSearchTerm(evt.target.value)} />
+                  <Button variant="secondary" onClick={handleSearch}>Search</Button>
+
+
+                </div>
+              </Col>
+
+            </Col>
+          </Row>
+
+        </Card>
+
+
+        <Card>
+          <Row>
+            {filteredProducts.map((product) => (
+              <div key={product.id} className="
+                col-xs-12
+                col-sm-8
+                col-lg-4">
+                <Product key={product.id} product={product} />
+              </div>
+            ))}
+          </Row>
+        </Card>
+      </Container >
     </>
   );
 }
-

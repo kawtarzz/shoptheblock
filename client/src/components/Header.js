@@ -29,7 +29,14 @@ export default function Header({ isLoggedIn, user }) {
                     <NavLink tag={RRNavLink} to="/product">Shop All</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink tag={RRNavLink} to="/categories">Shop by Category</NavLink>
+                    <NavLink tag={RRNavLink} to="/shoppingCart">Shopping Cart</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={RRNavLink} to="/userprofile/details/:id">My Account</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={RRNavLink} className="nav-link"
+                      style={{ cursor: "pointer" }} onClick={logout}>Logout</NavLink>
                   </NavItem>
                 </>
               }
@@ -49,46 +56,7 @@ export default function Header({ isLoggedIn, user }) {
         </Navbar>
       </div>
       <>
-        <NavItem>
-          <UserHeader />
-
-        </NavItem>
       </>
-    </>
-
-  );
-}
-
-const UserHeader = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
-
-  return (
-
-    <>
-
-      <Navbar color="light" light expand="md">
-        <NavbarToggler onClick={toggleDropdown} />
-        <Collapse isOpen={dropdownOpen} navbar>
-          <Nav>
-
-            <NavItem>
-              <NavLink tag={RRNavLink} to="/shoppingCart">Shopping Cart</NavLink>
-            </NavItem>
-
-            <NavItem>
-              <NavLink tag={RRNavLink} to="/order">Orders</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink tag={RRNavLink} to="/userprofile/details/:id">My Account</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink tag={RRNavLink} className="nav-link"
-                style={{ cursor: "pointer" }} onClick={logout}>Logout</NavLink>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
     </>
   );
 }

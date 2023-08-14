@@ -1,4 +1,4 @@
-import { Form, Button, ButtonGroup } from "reactstrap";
+import { Form, Button, ButtonGroup, ListGroup, ListGroupItem, ListGroupItemHeading } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Card, CardBody, CardImg, CardSubtitle, CardText, CardHeader, CardFooter, CardTitle, Input } from "reactstrap";
@@ -26,16 +26,21 @@ export default function Checkout({ user, cartItems }) {
 
   return (
     <>
-      <Card className="row d-flex">
+      <Card style={{ width: '60rem' }}>
         {cart.map((cartItem) => (
           <div key={cartItem.id} >
-            {cartItem.product.name}
-            <br></br>
-            <h5>{cartItem.product.name}</h5>
-            Price: ${cartItem.product.price * cartItem.quantity}
-            <br></br>
-            Quantity: {cartItem.quantity}
-            <br></br>
+            <ListGroup>
+              <ListGroupItem>
+                <ListGroupItemHeading tag="h6">
+                  {cartItem.product.name}
+
+                </ListGroupItemHeading>
+                Price: ${cartItem.product.price * cartItem.quantity}
+                <br></br>
+                Quantity: {cartItem.quantity}
+                <br></br>
+              </ListGroupItem>
+            </ListGroup>
 
           </div>
         ))}

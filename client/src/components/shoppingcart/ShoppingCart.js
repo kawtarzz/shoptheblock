@@ -23,9 +23,8 @@ const ShoppingCart = ({ user, cartItem, cart, products, product }) => {
     cartItem.quantity = quantity;
     setUpdateCartItem(cartItem);
     updateCart(updateCartItem).then(getUserCartByFirebaseId(firebaseUserId)).then(setCartItems([...cartItems]))
-    console.log(cartItems)
   }
-  // delete not working
+
   const handleDelete = (cartItem) => {
     deleteCartItem(cartItem.id).then(getUserCartByFirebaseId(firebaseUserId).then(setCartItems))
   }

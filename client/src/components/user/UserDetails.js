@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 export default function UserDetails({ user }) {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(user, "user")
 
 
 

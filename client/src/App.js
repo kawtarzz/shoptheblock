@@ -13,7 +13,6 @@ function App() {
   // once connection is established set to true or false by the "onLoginStatusChange" function
   useEffect(() => {
     onLoginStatusChange(setIsLoggedIn);
-    console.log("isLoggedIn", isLoggedIn)
   }, []);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div>
       <Router>
         <Header isLoggedIn={isLoggedIn} user={user} />
 
@@ -40,3 +39,5 @@ function App() {
 }
 
 export default App;
+
+
