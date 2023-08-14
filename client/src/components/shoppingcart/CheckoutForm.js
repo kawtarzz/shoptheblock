@@ -4,14 +4,27 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Input } from "reactstrap";
 import { addToCart } from "../../modules/cartManager";
 import { getUserCartByFirebaseId } from "../../modules/cartManager";
+import { getPaymentTypes } from "../../modules/checkoutManager";
 
-export default function CheckoutForm() {
+export default function CheckoutForm({ user, setCart }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [paymentTypes, setPaymentTypes] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const orderConfirmation = () => {
     navigate(`/order/confirmation`, { state: { background: location } })
   }
+
+  const handleOpen = () => {
+    setOpen(!open);
+  }
+
+
+  useEffect(() => {
+    getPaymentTypes().then(setPaymentTypes);
+    getUserCartByFirebaseId(user.firebaseUserId).then(setCart);
+  }, []);
 
 
   return (
@@ -69,6 +82,7 @@ export default function CheckoutForm() {
                 placeholder="Enter your phone"
                 required
               />
+
               <label htmlFor="email">Email</label>
               <Input
                 type="text"
@@ -76,6 +90,19 @@ export default function CheckoutForm() {
                 id="email"
                 placeholder="Enter your email"
                 required />
+              <label htmlFor="creditCard">Select Payment</label>
+              <Input
+                type="select"
+                name="creditCard"
+                id="creditCard"
+                placeholder="Select Payment"
+                required>
+                {paymentTypes.map((paymentType) => (
+                  <option key={paymentType.id} value={paymentType.name} >{paymentType.name}</option>
+                ))}
+              </Input>
+
+
             </div>
           </div>
           <Button color="primary" size="sm" onClick={orderConfirmation}>Submit Order</Button>

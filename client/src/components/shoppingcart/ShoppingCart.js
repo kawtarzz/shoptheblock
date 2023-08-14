@@ -4,36 +4,41 @@ import { getUserCartByFirebaseId } from '../../modules/cartManager';
 import CartItem from './CartItem';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CheckoutForm from './Checkout';
+import Checkout from './Checkout';
+import { deleteCartItem } from '../../modules/cartManager';
+import { updateCart } from '../../modules/cartManager';
 
 const ShoppingCart = ({ user, cartItem, cart, products, product }) => {
   const [cartItems, setCartItems] = useState([])
+  const [updateCartItem, setUpdateCartItem] = useState({});
   const firebaseUserId = user.firebaseUserId;
   const location = useLocation();
   const navigate = useNavigate();
-
 
   useEffect(() => {
     getUserCartByFirebaseId(firebaseUserId).then(setCartItems);
   }, [])
 
-
   const updateQuantity = (cartItem, quantity) => {
     cartItem.quantity = quantity;
-    setCartItems([...cartItems])
+    setUpdateCartItem(cartItem);
+    updateCart(updateCartItem).then(getUserCartByFirebaseId(firebaseUserId)).then(setCartItems([...cartItems]))
+    console.log(cartItems)
   }
   // delete not working
-  const deleteCartItem = (cartItem) => {
+  const handleDelete = (cartItem) => {
     deleteCartItem(cartItem.id).then(getUserCartByFirebaseId(firebaseUserId).then(setCartItems))
   }
 
-
   const handleCheckout = () => {
     setCartItems([...cartItems])
-
-    navigate(`/checkout`, { state: { background: location } })
+    navigate(`/shoppingcart/checkout`, { state: { background: location } })
   };
 
 
+  useEffect(() => {
+    getUserCartByFirebaseId(firebaseUserId).then(setCartItems);
+  }, [])
 
   return (
     <>
@@ -43,30 +48,32 @@ const ShoppingCart = ({ user, cartItem, cart, products, product }) => {
         <div className="col">
           {cartItems.map((cartItem) => (
             <div key={cartItem.id} >
-              <img src={cartItem.productImage} />
-              <br></br><h6>
-                Product Name: {cartItem.productName}
-              </h6>
-              {console.log(product, cartItem, "product", "cartItem")}
+              <div className="box" style={{ size: "20%" }}>
+                <img src={cartItem.product.productImage} />
+                <br></br><h6>
+                  {cartItem.product.productName}
+                </h6>
+                <br></br>
+                <h5>{cartItem.product.name}</h5>
+                Price: ${cartItem.product.price * cartItem.quantity}
+                <br></br>
+                Quantity: {cartItem.quantity}
+                <br></br>
+                <ButtonGroup>
+                  <Button color="primary" size="sm" onClick={() => updateQuantity(cartItem, cartItem.quantity + 1)}>+</Button>
+                  <Button color="primary" size="sm" onClick={() =>
+                    updateQuantity(cartItem, cartItem.quantity - 1)}>-</Button>
 
-              <h5>{cartItem.productName}</h5>
-              Price: ${cartItem.productPrice * cartItem.quantity}
-              <br></br>
-              Quantity: {cartItem.quantity}
-              <br></br>
-              <ButtonGroup>
-                <Button color="primary" size="sm" onClick={() => updateQuantity(cartItem, cartItem.quantity + 1)}>+</Button>
-                <Button color="primary" size="sm" onClick={() =>
-                  updateQuantity(cartItem, cartItem.quantity - 1)}>-</Button>
-
-                <Button color="secondary" size="sm" onClick={() => deleteCartItem(cartItem)}>Remove Item</Button>
-              </ButtonGroup>
-              <hr></hr>
+                  <Button color="secondary" size="sm" onClick={() => handleDelete(cartItem)}>Remove Item</Button>
+                </ButtonGroup>
+                <hr></hr>
+              </div>
             </div>
           ))}
           <CardFooter>
-            <h5>Subtotal: ${cartItems.reduce((sum, cartItem) => sum + (cartItem.productPrice * cartItem.quantity), 0)}</h5>
+            <h5>Subtotal: ${cartItems.reduce((sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity), 0)}</h5>
             <Button color="primary" size="sm" onClick={handleCheckout}>Proceed to Checkout</Button>
+
           </CardFooter>
         </div>
       </Card>
@@ -76,3 +83,8 @@ const ShoppingCart = ({ user, cartItem, cart, products, product }) => {
 
 export default ShoppingCart;
 // { cartItem.product?.productImage }
+{/* <Checkout cartItems={cartItems} cart={cart} cartItem={cartItem} setCartItems={setCartItems} /> */ }
+
+export const handleTotal = (cartItems) => {
+  const total = cartItems.reduce((sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity), 0)
+}

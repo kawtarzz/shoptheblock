@@ -21,6 +21,7 @@ export const getUserCartByFirebaseId = (firebaseUserId) => {
   });
 };
 
+
 export const getShoppingCart = () => {
   return getToken().then((token) => {
   return fetch(apiUrl, {
@@ -61,8 +62,6 @@ export const addToCart = (cartItem) => {
     });
   };
 
-
-
   export const updateCart = (cart) => {
     return getToken().then((token) => {
       return fetch(`${apiUrl}/${cart.id}`, {
@@ -75,8 +74,6 @@ export const addToCart = (cartItem) => {
       });
     });
   };
-
-  
 
   export const deleteCartItem = (id) => {
     return getToken().then((token) => {
