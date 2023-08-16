@@ -2,7 +2,6 @@ import { Form, Button, ButtonGroup } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Card, CardBody, CardImg, CardSubtitle, CardText, CardHeader, CardFooter, CardTitle, Input } from "reactstrap";
-import CheckoutForm from "./CheckoutForm";
 import { getUserCartByFirebaseId } from "../../modules/cartManager";
 
 export default function Checkout({ user, cartItems }) {
@@ -63,5 +62,3 @@ export default function Checkout({ user, cartItems }) {
     </>
   )
 }
-{/* <CheckoutForm user={user} cartItem={cartItem} cartItems={cartItems} /> */ }
-

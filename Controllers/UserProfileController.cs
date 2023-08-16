@@ -14,7 +14,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UserProfileController : ControllerBase
     {
         private readonly IUserProfileRepository _userProfileRepository;
@@ -30,19 +30,19 @@ namespace Fullstack_ECommerce_.Controllers
         }
 
         [HttpGet("DoesUserExist/{firebaseUserId}")]
-       public IActionResult DoesUserExist(string firebaseUserId)
-       {
+        public IActionResult DoesUserExist(string firebaseUserId)
+        {
             var userProfile = _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
             if (userProfile == null)
             {
                 return NotFound();
             }
             return Ok(userProfile);
-       }
+        }
 
         [HttpGet]
         public IActionResult GetAllUsers()
-        {          
+        {
             return Ok(_userProfileRepository.GetUsers());
         }
 
@@ -68,17 +68,18 @@ namespace Fullstack_ECommerce_.Controllers
                     nameof(GetUserProfile),
                     new { firebaseUserId = userProfile.FirebaseUserId },
                     userProfile);
-            } catch
+            }
+            catch
             {
                 return BadRequest();
             }
-           
+
         }
         // doeesnt need user paramater i think
         [HttpPut("{id}")]
         public IActionResult Edit(int id, UserProfile userProfile)
         {
-           
+
             if (id != userProfile.Id)
             {
                 return BadRequest();

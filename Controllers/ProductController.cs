@@ -13,7 +13,7 @@ namespace Fullstack_ECommerce_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -62,8 +62,8 @@ namespace Fullstack_ECommerce_.Controllers
             try
             {
 
-            _productRepository.Delete(productId);
-            return NoContent();
+                _productRepository.Delete(productId);
+                return NoContent();
             }
             catch
             {
