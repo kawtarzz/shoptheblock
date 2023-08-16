@@ -9,7 +9,6 @@ import { addToCart } from "../../modules/cartManager";
 import { getUserCartByFirebaseId } from "../../modules/cartManager";
 import ShoppingCart from "../shoppingcart/ShoppingCart";
 import CartItem from "../shoppingcart/CartItem";
-import "./Product.css";
 
 
 export default function ProductDetails({ user }) {

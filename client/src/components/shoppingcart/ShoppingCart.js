@@ -21,9 +21,7 @@ const ShoppingCart = ({ user, cartItem, cart, products, product }) => {
 
   const updateQuantity = (cartItem, quantity) => {
     cartItem.quantity = quantity;
-    setUpdateCartItem(cartItem);
-    updateCart(updateCartItem).then(getUserCartByFirebaseId(firebaseUserId)).then(setCartItems([...cartItems]))
-    console.log(cartItems)
+    updateCart(cartItem).then(getUserCartByFirebaseId(firebaseUserId).then(setCartItems))
   }
   // delete not working
   const handleDelete = (cartItem) => {
@@ -31,7 +29,7 @@ const ShoppingCart = ({ user, cartItem, cart, products, product }) => {
   }
 
   const handleCheckout = () => {
-    setCartItems([...cartItems])
+    getUserCartByFirebaseId(firebaseUserId).then(setCartItems);
     navigate(`/shoppingcart/checkout`, { state: { background: location } })
   };
 

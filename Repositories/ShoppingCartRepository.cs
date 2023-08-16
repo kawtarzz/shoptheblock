@@ -23,7 +23,7 @@ namespace Fullstack_ECommerce_.Repositories
                     cmd.CommandText = @"
                     SELECT sc.Id AS cartId, sc.Quantity, sc.UserId,
                     sc.ProductId, sc.ShoppingComplete, 
-                    up.[Id], up.FullName, up.FirebaseUserId,
+                    up.[Id], up.FullName, up.FirebaseUserId, up.Email,
                         p.[Id] AS ProductId, p.[Name] AS ProductName, p.Price AS ProductPrice, p.ProductImage AS ProductImage
                         FROM ShoppingCart sc
                         LEFT JOIN [UserProfile] up ON sc.UserId = up.Id
@@ -69,7 +69,7 @@ namespace Fullstack_ECommerce_.Repositories
             using (var cmd = conn.CreateCommand())
             {
                 cmd.CommandText = @"
-                    SELECT sc.[Id], sc.Quantity, sc.UserId,
+                    SELECT sc.[Id] AS cartId, sc.Quantity, sc.UserId,
                     sc.ProductId, sc.ShoppingComplete, 
                     up.[Id], up.FullName, up.FirebaseUserId, up.Email,
                     p.[Id] AS ProductId, p.[Name] AS ProductName, p.Price AS ProductPrice, p.ProductImage AS ProductImage
@@ -77,7 +77,7 @@ namespace Fullstack_ECommerce_.Repositories
                     JOIN [UserProfile] up ON sc.UserId = up.[Id]
                     JOIN [Product] p ON sc.ProductId = p.[Id]
                     WHERE sc.Id = @cartId";
-                DbUtils.AddParameter(cmd, "@Id", cartId);
+                DbUtils.AddParameter(cmd, "@cartId", cartId);
 
                 ShoppingCart shoppingCart = null;
                 var reader = cmd.ExecuteReader();
@@ -85,13 +85,14 @@ namespace Fullstack_ECommerce_.Repositories
                 {
                     shoppingCart = new ShoppingCart()
                     {
-                        Id = cartId,
+                        Id = DbUtils.GetInt(reader, "cartId"),
                         Quantity = DbUtils.GetInt(reader, "Quantity"),
                         UserId = DbUtils.GetInt(reader, "UserId"),
                         UserProfile = new UserProfile()
                         {
                             Id = DbUtils.GetInt(reader, "UserId"),
                             FullName = DbUtils.GetString(reader, "FullName"),
+                            Email = DbUtils.GetString(reader, "Email"),
                             FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId")
                         },
                         ProductId = DbUtils.GetInt(reader, "ProductId"),
@@ -140,6 +141,23 @@ namespace Fullstack_ECommerce_.Repositories
             }
         }
 
+        public void Delete(int cartId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    DELETE From ShoppingCart
+                    WHERE Id = @Id
+                    ";
+                    DbUtils.AddParameter(cmd, "@Id", cartId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
         public List<ShoppingCart> GetUserCartByFirebaseId(string firebaseUserId)
         {
@@ -149,9 +167,11 @@ namespace Fullstack_ECommerce_.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @" 
-                        SELECT sc.[Id], sc.Quantity, sc.UserId, sc.ProductId, sc.ShoppingComplete, up.[Id], up.FullName, up.FirebaseUserId, up.[Email]
+                        SELECT sc.[Id], sc.Quantity, sc.UserId, sc.ProductId, sc.ShoppingComplete, up.[Id], up.FullName, up.FirebaseUserId, up.[Email],
+                        p.[Name], p.[Id], p.Price, p.Description, p.ProductImage, p.Stock, p.CategoryId
                         FROM ShoppingCart sc
                         JOIN [UserProfile] up ON sc.UserId = up.[Id]
+                        JOIN [Product] p ON sc.ProductId = p.[Id]
                         WHERE up.FirebaseUserId = @firebaseUserId";
 
                     DbUtils.AddParameter(cmd, "@firebaseUserId", firebaseUserId);
@@ -173,6 +193,16 @@ namespace Fullstack_ECommerce_.Repositories
                                 FirebaseUserId = firebaseUserId
                             },
                             ProductId = DbUtils.GetInt(reader, "ProductId"),
+                            Product = new Product()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Price = DbUtils.GetDec(reader, "Price"),
+                                Description = DbUtils.GetString(reader, "Description"),
+                                ProductImage = DbUtils.GetString(reader, "ProductImage"),
+                                Stock = DbUtils.GetInt(reader, "Stock"),
+                                CategoryId = DbUtils.GetInt(reader, "CategoryId")
+                            },
                             ShoppingComplete = DbUtils.GetBool(reader, "ShoppingComplete")
                         });
                     }
@@ -180,6 +210,31 @@ namespace Fullstack_ECommerce_.Repositories
                 }
             }
 
+        }
+
+        public void Update(ShoppingCart shoppingCart)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            UPDATE ShoppingCart
+                            SET Quantity = @quantity,
+                            UserId = @userId,
+                            ProductId = @productId,
+                            ShoppingComplete = @shoppingComplete
+                            WHERE Id = @cartId";
+                    DbUtils.AddParameter(cmd, "@cartId", shoppingCart.Id);
+                    DbUtils.AddParameter(cmd, "@quantity", shoppingCart.Quantity);
+                    DbUtils.AddParameter(cmd, "@userId", shoppingCart.UserId);
+                    DbUtils.AddParameter(cmd, "@productId", shoppingCart.ProductId);
+                    DbUtils.AddParameter(cmd, "@shoppingComplete", shoppingCart.ShoppingComplete);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import { NavLink as RRNavLink } from "react-router-dom";
 import { logout } from "../modules/authManager";
 import CheckoutForm from "./shoppingcart/Checkout";
 import ShoppingCart from "./shoppingcart/ShoppingCart";
+import { CategoryDropdown } from "./category/CategoryShopper";
 
 
 // add padding to nav bar links and make them bigger
@@ -29,8 +30,9 @@ export default function Header({ isLoggedIn, user }) {
                     <NavLink tag={RRNavLink} to="/product">Shop All</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink tag={RRNavLink} to="/categories">Shop by Category</NavLink>
+                    <CategoryDropdown />
                   </NavItem>
+
                 </>
               }
               { /* When isLoggedIn === false, we will render the Login link */}
@@ -66,7 +68,6 @@ const UserHeader = () => {
   return (
 
     <>
-
       <Navbar color="light" light expand="md">
         <NavbarToggler onClick={toggleDropdown} />
         <Collapse isOpen={dropdownOpen} navbar>

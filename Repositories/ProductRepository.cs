@@ -24,7 +24,7 @@ namespace Fullstack_ECommerce_.Repositories
                     cmd.CommandText = @"
                     SELECT p.Id AS ProductId, p.Name AS ProductName,
                     p.Description, p.Price, p.ProductImage, p.CategoryId,
-                    p.Stock, 
+                    p.Stock, p.Featured, 
                     c.Id AS CategoryId, c.Name AS CategoryName
                     From Product p
                     LEFT JOIN Category c ON p.CategoryId = c.Id
@@ -48,7 +48,8 @@ namespace Fullstack_ECommerce_.Repositories
                                 {
                                     Id = DbUtils.GetInt(reader, "CategoryId"),
                                     Name = DbUtils.GetString(reader, "CategoryName")
-                                }
+                                },
+                                Featured = DbUtils.GetBool(reader, "Featured")
                             };
                             products.Add(newProduct);
                         }
@@ -68,7 +69,7 @@ namespace Fullstack_ECommerce_.Repositories
                     cmd.CommandText = @"
                     SELECT p.Id AS ProductId, p.Name AS ProductName,
                     p.Description, p.Price, p.ProductImage, p.CategoryId,
-                    p.Stock, 
+                    p.Stock, p.Featured, 
                     c.Id AS CategoryId, c.Name AS CategoryName
                     From Product p
                     LEFT JOIN Category c ON p.CategoryId = c.Id
@@ -94,7 +95,8 @@ namespace Fullstack_ECommerce_.Repositories
                                 {
                                     Id = DbUtils.GetInt(reader, "CategoryId"),
                                     Name = DbUtils.GetString(reader, "CategoryName")
-                                }
+                                },
+                                Featured = DbUtils.GetBool(reader, "Featured")
                             };
                         }
                         reader.Close();
@@ -117,7 +119,8 @@ namespace Fullstack_ECommerce_.Repositories
                     Description,
                     ProductImage,
                     Stock,
-                    CategoryId
+                    CategoryId,
+                    Featured
                     )
                     
                     VALUES (
@@ -127,6 +130,7 @@ namespace Fullstack_ECommerce_.Repositories
                     @ProductImage, 
                     @Stock, 
                     @CategoryId
+                    @Featured,
                     )";
                     DbUtils.AddParameter(cmd, "@Name", product.Name);
                     DbUtils.AddParameter(cmd, "@Price", product.Price);
@@ -134,7 +138,7 @@ namespace Fullstack_ECommerce_.Repositories
                     DbUtils.AddParameter(cmd, "@ProductImage", product.ProductImage);
                     DbUtils.AddParameter(cmd, "@Stock", product.Stock);
                     DbUtils.AddParameter(cmd,"@CategoryId", product.CategoryId);
-                    
+                    DbUtils.AddParameter(cmd, "@Featured", product.Featured);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -158,6 +162,7 @@ namespace Fullstack_ECommerce_.Repositories
                         Stock = @stock
                         CategoryId = @categoryId
                         CategoryName = @categoryName
+                        Featured = @featured
                     WHERE Id = @id
                     ";
                     DbUtils.AddParameter(cmd, "@id", product.Id);
@@ -168,6 +173,7 @@ namespace Fullstack_ECommerce_.Repositories
                     DbUtils.AddParameter(cmd, "@stock", product.Stock);
                     DbUtils.AddParameter(cmd, "@categoryId", product.Category.Id);
                     DbUtils.AddParameter(cmd, "@categoryName", product.Category.Name);
+                    DbUtils.AddParameter(cmd, "@featured", product.Featured);
 
                     cmd.ExecuteNonQuery();
                 }

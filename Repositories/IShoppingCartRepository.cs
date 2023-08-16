@@ -12,5 +12,9 @@ namespace Fullstack_ECommerce_.Repositories
         public void Add(ShoppingCart shoppingCart);
 
         public List<ShoppingCart> GetUserCartByFirebaseId(string firebaseUserId);
+
+        public void Delete(int cartId);
+
+        public void Update(ShoppingCart shoppingCart);
     }
 }
