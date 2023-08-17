@@ -34,16 +34,23 @@ export const SortByCategoryButtons = ({ categoryName, handleCategoryFilter, cate
 export const CategoryDropdown = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const categoryNames = [...new Set(products.map((p) => p.category.name))]
+
+  const getProducts = () => {
+    return fetch("/api/product")
+      .then((res) => res.json())
+      .then(setProducts);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   const handleCategoryFilter = (categoryName) => {
     setSelectedCategory(categoryName === "all" ? null : categoryName);
   };
 
-  useEffect(() => {
-    getProducts().then(setProducts);
-  }, []);
-
-  const categoryNames = [...new Set(products.map((p) => p.category.name))]
 
   const filteredProducts = selectedCategory ? products.filter((p) => p.category.name === selectedCategory) : products;
 

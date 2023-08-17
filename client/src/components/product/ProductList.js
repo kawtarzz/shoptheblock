@@ -29,7 +29,6 @@ export default function ProductList() {
   return (
     <>
       <SortByCategoryButtons categoryName={selectedCategory} handleCategoryFilter={handleCategoryFilter} categoryNames={categoryNames} />
-
       <div className="card">
         <div className="row">
           {filteredProducts.map((product) => (

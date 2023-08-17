@@ -13,7 +13,7 @@ export default function Product({ product }) {
   }
 
   return (
-    <Card className="m-4" style={{ 'borderRadius': '3px' }}>
+    <Card className="m-4">
       <CardTitle tag="h5" onClick={handleDetails}>
         {product.name}
       </CardTitle>
@@ -22,13 +22,9 @@ export default function Product({ product }) {
       </CardSubtitle>
       <CardImg top width="100%" src={product.productImage} alt="Product Image" onClick={handleDetails} className="box" />
       <CardBody>
-        <CardText>Price: ${product.price}</CardText>
+        <CardText>${product.price}</CardText>
       </CardBody>
-      <ButtonGroup>
-        <Button color="primary" size="x-sm" onClick={handleDetails}>View</Button>
 
-
-      </ButtonGroup>
 
     </Card>
   )

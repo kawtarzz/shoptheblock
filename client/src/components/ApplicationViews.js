@@ -8,9 +8,7 @@ import { Navigate } from "react-router-dom";
 import ShoppingCart from "./shoppingcart/ShoppingCart";
 import { Home } from "./Home";
 import UserDetails from "./user/UserDetails";
-import { Link } from "react-router-dom";
-import { CardFooter, CardSubtitle, Card, CardHeader } from "reactstrap";
-import { Footer } from "./Footer";
+import { Footer } from "./Navigation/Footer";
 import Checkout from "./shoppingcart/Checkout";
 import CheckoutForm from "./shoppingcart/CheckoutForm";
 import { OrderConfirmation } from "./shoppingcart/OrderConfirmation";
@@ -48,7 +46,6 @@ export default function ApplicationViews({ isLoggedIn, user }) {
         </Route>
       </Routes>
       <Footer />
-
 
     </main>
   )
