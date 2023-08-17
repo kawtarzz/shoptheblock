@@ -11,7 +11,14 @@ import { useEffect, useState } from "react";
 export default function UserDetails({ user }) {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(user, "user")
+  const [userDetails, setUserDetails] = useState({});
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    getUserDetailsById(id).then(setUserDetails);
+  }, []);
+
 
 
 
@@ -21,13 +28,10 @@ export default function UserDetails({ user }) {
     return (
       <>
         <Card key={user.id} >
-          <CardImg top width="100%" src={user.profilePic} alt="Card image cap" />
-          <br></br>
-          <CardTitle tag="h">
-          </CardTitle>
-          <hr></hr>
+
           <CardBody style={{ alignContent: "center" }}>
-            <b>Name:</b>  {user.fullName}
+            <b>Name:</b>
+            {user.fullName}
             <br></br>
             <b>Email:</b> {user.email}
           </CardBody>

@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 import { Spinner } from 'reactstrap';
 import { onLoginStatusChange, getUserDetails } from './modules/authManager';
 import ApplicationViews from './components/ApplicationViews';
-import Header from './components/Header';
+import Header from './components/Navigation/Header';
 import firebase from 'firebase';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
-  const [user, setUser] = useState({ id: 0, fullName: "", email: "", password: "", profilePic: "" });
+  const [user, setUser] = useState({ id: 0, fullName: "", email: "", profilePic: "" });
   // once connection is established set to true or false by the "onLoginStatusChange" function
   useEffect(() => {
     onLoginStatusChange(setIsLoggedIn);
@@ -32,7 +32,6 @@ function App() {
     <div className="App">
       <Router>
         <Header isLoggedIn={isLoggedIn} user={user} />
-
         <ApplicationViews isLoggedIn={isLoggedIn} user={user} />
       </Router>
     </div>
