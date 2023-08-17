@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardBody, CardFooter, CardHeader, CardTitle, CardImg, CardText, Button, ButtonGroup, ButtonDropdown, CardSubtitle } from 'reactstrap';
 import { getProducts } from '../modules/productManager';
 import { useEffect, useState } from 'react';
-import { getProductDetails } from '../modules/productManager';
 import Product from './product/Product';
-
 
 export const Home = ({ user }) => {
 
