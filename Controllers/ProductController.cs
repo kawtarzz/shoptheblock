@@ -62,8 +62,8 @@ namespace Fullstack_ECommerce_.Controllers
             try
             {
 
-            _productRepository.Delete(productId);
-            return NoContent();
+                _productRepository.Delete(productId);
+                return NoContent();
             }
             catch
             {

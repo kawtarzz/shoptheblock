@@ -69,4 +69,3 @@ export default function Checkout({ user, cartItems }) {
   )
 }
 {/* <CheckoutForm user={user} cartItem={cartItem} cartItems={cartItems} /> */ }
-

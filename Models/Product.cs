@@ -18,5 +18,7 @@ namespace Fullstack_ECommerce_.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
+        public bool Featured { get; set; }
+
     }
 }
