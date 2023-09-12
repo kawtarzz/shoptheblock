@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Fullstack_ECommerce_.Models;
 using Fullstack_ECommerce_.Utils;
+
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
@@ -24,7 +26,7 @@ namespace Fullstack_ECommerce_.Repositories
                     cmd.CommandText = @"
                     SELECT p.Id AS ProductId, p.Name AS ProductName,
                     p.Description, p.Price, p.ProductImage, p.CategoryId,
-                    p.Stock, 
+                    p.Stock, p.Featured, 
                     c.Id AS CategoryId, c.Name AS CategoryName
                     From Product p
                     LEFT JOIN Category c ON p.CategoryId = c.Id
@@ -48,7 +50,8 @@ namespace Fullstack_ECommerce_.Repositories
                                 {
                                     Id = DbUtils.GetInt(reader, "CategoryId"),
                                     Name = DbUtils.GetString(reader, "CategoryName")
-                                }
+                                },
+                                Featured = DbUtils.GetBool(reader, "Featured")
                             };
                             products.Add(newProduct);
                         }
@@ -68,7 +71,7 @@ namespace Fullstack_ECommerce_.Repositories
                     cmd.CommandText = @"
                     SELECT p.Id AS ProductId, p.Name AS ProductName,
                     p.Description, p.Price, p.ProductImage, p.CategoryId,
-                    p.Stock, 
+                    p.Stock, p.Featured, 
                     c.Id AS CategoryId, c.Name AS CategoryName
                     From Product p
                     LEFT JOIN Category c ON p.CategoryId = c.Id
@@ -77,31 +80,32 @@ namespace Fullstack_ECommerce_.Repositories
 
                     DbUtils.AddParameter(cmd, "@Id", productId);
 
-                        Product product = null;
+                    Product product = null;
                     var reader = cmd.ExecuteReader();
-                        if (reader.Read())
+                    if (reader.Read())
+                    {
+                        product = new Product()
                         {
-                            product = new Product()
+                            Id = productId,
+                            Name = DbUtils.GetString(reader, "ProductName"),
+                            Price = DbUtils.GetDec(reader, "Price"),
+                            Description = DbUtils.GetString(reader, "Description"),
+                            ProductImage = DbUtils.GetString(reader, "ProductImage"),
+                            Stock = DbUtils.GetInt(reader, "Stock"),
+                            CategoryId = DbUtils.GetInt(reader, "CategoryId"),
+                            Category = new Category
                             {
-                                Id = productId,
-                                Name = DbUtils.GetString(reader, "ProductName"),
-                                Price = DbUtils.GetDec(reader, "Price"),
-                                Description = DbUtils.GetString(reader, "Description"),
-                                ProductImage = DbUtils.GetString(reader, "ProductImage"),
-                                Stock = DbUtils.GetInt(reader, "Stock"),
-                                CategoryId = DbUtils.GetInt(reader, "CategoryId"),
-                                Category = new Category
-                                {
-                                    Id = DbUtils.GetInt(reader, "CategoryId"),
-                                    Name = DbUtils.GetString(reader, "CategoryName")
-                                }
-                            };
-                        }
-                        reader.Close();
-                        return product;
+                                Id = DbUtils.GetInt(reader, "CategoryId"),
+                                Name = DbUtils.GetString(reader, "CategoryName")
+                            },
+                            Featured = DbUtils.GetBool(reader, "Featured")
+                        };
                     }
+                    reader.Close();
+                    return product;
                 }
             }
+        }
 
         public void Add(Product product)
         {
@@ -117,7 +121,8 @@ namespace Fullstack_ECommerce_.Repositories
                     Description,
                     ProductImage,
                     Stock,
-                    CategoryId
+                    CategoryId,
+                    Featured
                     )
                     
                     VALUES (
@@ -127,21 +132,22 @@ namespace Fullstack_ECommerce_.Repositories
                     @ProductImage, 
                     @Stock, 
                     @CategoryId
+                    @Featured,
                     )";
                     DbUtils.AddParameter(cmd, "@Name", product.Name);
                     DbUtils.AddParameter(cmd, "@Price", product.Price);
                     DbUtils.AddParameter(cmd, "@Description", product.Description);
                     DbUtils.AddParameter(cmd, "@ProductImage", product.ProductImage);
                     DbUtils.AddParameter(cmd, "@Stock", product.Stock);
-                    DbUtils.AddParameter(cmd,"@CategoryId", product.CategoryId);
-                    
+                    DbUtils.AddParameter(cmd, "@CategoryId", product.CategoryId);
+                    DbUtils.AddParameter(cmd, "@Featured", product.Featured);
 
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        
+
         public void Update(Product product)
         {
             using (SqlConnection conn = Connection)
@@ -158,6 +164,7 @@ namespace Fullstack_ECommerce_.Repositories
                         Stock = @stock
                         CategoryId = @categoryId
                         CategoryName = @categoryName
+                        Featured = @featured
                     WHERE Id = @id
                     ";
                     DbUtils.AddParameter(cmd, "@id", product.Id);
@@ -168,6 +175,7 @@ namespace Fullstack_ECommerce_.Repositories
                     DbUtils.AddParameter(cmd, "@stock", product.Stock);
                     DbUtils.AddParameter(cmd, "@categoryId", product.Category.Id);
                     DbUtils.AddParameter(cmd, "@categoryName", product.Category.Name);
+                    DbUtils.AddParameter(cmd, "@featured", product.Featured);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -176,7 +184,7 @@ namespace Fullstack_ECommerce_.Repositories
 
         public void Delete(int productId)
         {
-            using ( SqlConnection conn = Connection)
+            using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -193,5 +201,4 @@ namespace Fullstack_ECommerce_.Repositories
         }
     }
 }
-
 

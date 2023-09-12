@@ -8,7 +8,6 @@ import Container from "reactstrap/lib/Container";
 import Label from "reactstrap/lib/Label";
 import Row from "reactstrap/lib/Row";
 import Col from "reactstrap/lib/Col";
-import { MenuItem, MenuList, Stack } from "@mui/material";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -49,30 +48,23 @@ export default function ProductList() {
       <Container
         className="justify-content-center">
         <Card>
-
-          <Stack direction="horizontal" gap={4}>
-            <Row>
-              <Col sm={2}>
-                <MenuItem>
-                  <MenuList>
-                    <Label htmlFor="label-text">Filter by Category: </Label>
-                    <select
-                      name="category"
-                      id="category"
-                      onChange={(evt) => handleCategoryFilter(evt.target.value)}
-                    >
-                      <option value="all">All Products</option>
-                      {categoryNames.map((categoryName) => (
-                        <option key={categoryName} value={categoryName}>
-                          {categoryName}
-                        </option>
-                      ))}
-                    </select>
-                  </MenuList>
-                </MenuItem>
-              </Col>
-            </Row>
-          </Stack>
+          <Row>
+            <Col sm={2}>
+              <Label htmlFor="label-text">Filter by Category: </Label>
+              <select
+                name="category"
+                id="category"
+                onChange={(evt) => handleCategoryFilter(evt.target.value)}
+              >
+                <option value="all">All Products</option>
+                {categoryNames.map((categoryName) => (
+                  <option key={categoryName} value={categoryName}>
+                    {categoryName}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          </Row>
           <Row>
 
             <Col xs={{ order: 12 }}>
@@ -92,17 +84,12 @@ export default function ProductList() {
                     value={searchTerm}
                     onChange={(evt) => setSearchTerm(evt.target.value)} />
                   <Button variant="secondary" onClick={handleSearch}>Search</Button>
-
-
                 </div>
               </Col>
 
             </Col>
           </Row>
-
         </Card>
-
-
         <Card>
           <Row>
             {filteredProducts.map((product) => (

@@ -60,7 +60,7 @@ namespace Fullstack_ECommerce_.Controllers
         {
             _shoppingCartRepository.Add(newCart);
             return CreatedAtAction("GET", new { newCart.Id }, newCart);
-          
+
         }
 
         [HttpDelete("{cartId}")]
@@ -76,6 +76,16 @@ namespace Fullstack_ECommerce_.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPut("{cartId}")]
+        public IActionResult Edit(int cartId, ShoppingCart shoppingCart)
+        {
+            if (cartId != shoppingCart.Id)
+            {
+                return BadRequest();
+            }
+            _shoppingCartRepository.Update(shoppingCart);
+            return NoContent();
+        }
     }
 }
-
