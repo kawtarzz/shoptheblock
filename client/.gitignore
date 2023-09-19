@@ -42,7 +42,9 @@ obj/
 seedData.sql
 
 # User-specific files
-
+appsettings.json
+Startup.cs
+Program.cs
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 
