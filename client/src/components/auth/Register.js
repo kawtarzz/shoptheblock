@@ -20,7 +20,6 @@ export default function Register() {
       const user = {
         fullName,
         email,
-        // password, ? do we need this?
         profilePic,
       };
       register(user, password).then(() => navigate("/"));

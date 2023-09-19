@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom'
@@ -7,12 +6,10 @@ import { Button } from 'reactstrap';
 import { Input } from "reactstrap";
 import { addToCart, deleteCartItem } from "../../modules/cartManager";
 import { getUserCartByFirebaseId } from "../../modules/cartManager";
-import ShoppingCart from "../shoppingcart/ShoppingCart";
 
 
 export default function CartItem({ cartItem, product, user, cart, setCart, setCartItem, handleCheckout }) {
   const navigate = useNavigate();
-  const location = useLocation();
   const [quantity, setQuantity] = useState(cartItem.quantity);
   const [cartItems, setCartItems] = useState([])
 
@@ -77,12 +74,9 @@ export default function CartItem({ cartItem, product, user, cart, setCart, setCa
         </CardBody>
       </Card >
       <div>
-
         <Button color="primary" size="x-sm" onClick={() => navigate("/checkout")}>Checkout</Button>
 
       </div>
     </>
-
-
   )
 }

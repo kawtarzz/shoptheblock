@@ -80,8 +80,7 @@ const ShoppingCart = ({ user, cartItem, cart, products, product }) => {
 };
 
 export default ShoppingCart;
-// { cartItem.product?.productImage }
-{/* <Checkout cartItems={cartItems} cart={cart} cartItem={cartItem} setCartItems={setCartItems} /> */ }
+
 
 export const handleTotal = (cartItems) => {
   const total = cartItems.reduce((sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity), 0)

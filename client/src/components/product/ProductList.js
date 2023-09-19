@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Product from "./Product";
 import { getProducts } from "../../modules/productManager";
-import { Card, Button, ButtonGroup } from "reactstrap";
-import { Input } from "reactstrap";
 import "./Product.css";
-import { Label } from "reactstrap";
 import { SortByCategoryButtons } from "../category/CategoryShopper";
 
 

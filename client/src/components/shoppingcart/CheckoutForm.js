@@ -20,12 +20,10 @@ export default function CheckoutForm({ user, setCart }) {
     setOpen(!open);
   }
 
-
   useEffect(() => {
     getPaymentTypes().then(setPaymentTypes);
     getUserCartByFirebaseId(user.firebaseUserId).then(setCart);
   }, []);
-
 
   return (
     <Card>
@@ -101,7 +99,6 @@ export default function CheckoutForm({ user, setCart }) {
                   <option key={paymentType.id} value={paymentType.name} >{paymentType.name}</option>
                 ))}
               </Input>
-
 
             </div>
           </div>

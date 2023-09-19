@@ -7,8 +7,6 @@ import { Card, Button, ButtonGroup, CardImg, CardText, CardBody, CardTitle, Card
 import { Input } from "reactstrap";
 import { addToCart } from "../../modules/cartManager";
 import { getUserCartByFirebaseId } from "../../modules/cartManager";
-import ShoppingCart from "../shoppingcart/ShoppingCart";
-import CartItem from "../shoppingcart/CartItem";
 
 
 export default function ProductDetails({ user }) {
@@ -16,10 +14,8 @@ export default function ProductDetails({ user }) {
   const location = useLocation();
   const { id } = useParams(), [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
-  const [cartItem, setCartItem] = useState({});
   const [cart, setCart] = useState([]);
   const [isLowStock, setIsLowStock] = useState(false);
-  const [isProduct, setIsProduct] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
@@ -28,7 +24,6 @@ export default function ProductDetails({ user }) {
   };
 
   const handleCheckout = () => {
-    //checkout confirmation page - order summary
     navigate(`/checkout`, { state: { background: location } })
   };
 
@@ -74,8 +69,6 @@ export default function ProductDetails({ user }) {
     }
   }, [product])
 
-
-
   if (product === null) {
     return <p>Sorry, there is no product with id of {id}</p>
   } else {
@@ -114,18 +107,3 @@ export default function ProductDetails({ user }) {
     )
   }
 }
-
-
-  // <CartItem key={product.id} user={user} cartItem={cartItem} /> * /}
-  //   < ShoppingCart key = { cartItem.id } user = { user } cartItem = { cartItem } cart = { cart } /> * /}
-
-  //     < Navbar color = "light" light expand = "md" >
-  //       <NavbarToggler onClick={toggle}>
-  //         <Collapse isOpen={isOpen} navbar>
-  //           <Nav className="mr-auto" navbar>
-  //             <NavItem>
-  //               <ShoppingCart key={cartItem.id} user={user} cartItem={cartItem} cart={cart} />
-  //             </NavItem>
-  //           </Nav>
-  //         </Collapse>
-  //       </NavbarToggler>

@@ -50,7 +50,6 @@ export const login = (email, password) => {
     .then((doesUserExist) => {
       if (!doesUserExist) {
 
-        // If we couldn't find the user in our app's database, or the user is deactivated, we should logout of firebase
         logout();
 
         throw new Error("Something's wrong. The user exists in firebase, but not in the application database. (User may be deactivated)");
