@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.56c161b6.css",
-    "main.js": "/static/js/main.5d31de0a.js",
-    "index.html": "/index.html",
-    "main.56c161b6.css.map": "/static/css/main.56c161b6.css.map",
-    "main.5d31de0a.js.map": "/static/js/main.5d31de0a.js.map"
+    "main.css": "/kawtarzz/shoptheblock/static/css/main.7ed1a17a.css",
+    "main.js": "/kawtarzz/shoptheblock/static/js/main.0747f3bd.js",
+    "index.html": "/kawtarzz/shoptheblock/index.html",
+    "main.7ed1a17a.css.map": "/kawtarzz/shoptheblock/static/css/main.7ed1a17a.css.map",
+    "main.0747f3bd.js.map": "/kawtarzz/shoptheblock/static/js/main.0747f3bd.js.map"
   },
   "entrypoints": [
-    "static/css/main.56c161b6.css",
-    "static/js/main.5d31de0a.js"
+    "static/css/main.7ed1a17a.css",
+    "static/js/main.0747f3bd.js"
   ]
 }
