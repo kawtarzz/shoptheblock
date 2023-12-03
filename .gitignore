@@ -20,3 +20,7 @@ obj/Debug/net5.0/Fullstack_ECommerce_.RazorTargetAssemblyInfo.cache
 obj/Debug/net5.0/ref/Fullstack_ECommerce_.dll
 obj/Debug/net5.0/staticwebassets/Fullstack_ECommerce_.StaticWebAssets.Manifest.cache
 obj/Debug/net5.0/staticwebassets/Fullstack_ECommerce_.StaticWebAssets.xml
+appsettings.json
+firebase.json
+Startup.cs
+Program.cs
